@@ -2,8 +2,8 @@
 
 import React from "react";
 import { useInventory } from "@/context/InventoryContext";
-import { SalesOrder, SalesStatus, PaymentStatus } from "@/types/inventory";
-import { X, Printer, CheckCircle, Clock, Truck, ShieldCheck } from "lucide-react";
+import { SalesOrder } from "@/types/inventory";
+import { X, Printer, ShieldCheck, Truck } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 interface InvoiceViewModalProps {
@@ -13,7 +13,7 @@ interface InvoiceViewModalProps {
 }
 
 export function InvoiceViewModal({ isOpen, onClose, order }: InvoiceViewModalProps) {
-  const { customers, godowns, updateSalesStatus, updatePaymentStatus } = useInventory();
+  const { customers, godowns, updateSalesStatus } = useInventory();
 
   if (!isOpen || !order) return null;
 
@@ -25,15 +25,15 @@ export function InvoiceViewModal({ isOpen, onClose, order }: InvoiceViewModalPro
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="w-full max-w-3xl bg-white border border-[#EAE4E3] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Top Controls Bar */}
-        <div className="flex items-center justify-between px-6 py-3.5 border-b border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="flex items-center justify-between px-6 py-3.5 border-b border-[#EAE4E3] bg-[#FAF8F7]">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Tax Invoice Document
             </span>
-            <span className="px-2 py-0.5 text-xs font-mono font-medium rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-900">
+            <span className="px-2.5 py-0.5 text-xs font-mono font-bold rounded-full bg-[#EAF4F4] text-[#165353] border border-[#228181]/20">
               {order.invoiceNumber}
             </span>
           </div>
@@ -41,14 +41,14 @@ export function InvoiceViewModal({ isOpen, onClose, order }: InvoiceViewModalPro
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-700 shadow-sm transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl bg-white border border-[#DDD6D5] text-[#1C2727] hover:bg-[#FAF8F7] active:scale-95 shadow-xs transition-all"
             >
-              <Printer className="w-3.5 h-3.5" />
-              Print / Save PDF
+              <Printer className="w-3.5 h-3.5 text-[#228181]" />
+              <span>Print / Save PDF</span>
             </button>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-[#EAE4E3]/60 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -56,175 +56,165 @@ export function InvoiceViewModal({ isOpen, onClose, order }: InvoiceViewModalPro
         </div>
 
         {/* Printable Invoice Container */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 print:p-0">
+        <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-white text-[#1C2727] print:p-0">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200 dark:border-zinc-800">
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-[#EAE4E3]">
             <div>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[#228181] flex items-center justify-center text-white font-bold text-base shadow-xs">
-                  S
+                <div className="w-8 h-8 rounded-lg bg-[#228181] flex items-center justify-center text-white font-black text-sm shadow-xs">
+                  SS
                 </div>
-                <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-                  SasthaSoft Enterprise Solutions
+                <h2 className="text-xl font-bold tracking-tight text-[#1C2727]">
+                  SasthaSoft Enterprise Solutions Ltd
                 </h2>
               </div>
-              <p className="text-xs text-slate-500 mt-1 max-w-sm">
-                Advanced Inventory Logistics & Supply Chain Automation Platform.
+              <p className="text-xs text-slate-500 mt-1 max-w-sm font-medium">
+                Advanced Inventory Logistics &amp; Supply Chain Automation Platform.
               </p>
             </div>
 
             <div className="sm:text-right">
-              <div className="text-2xl font-black font-mono tracking-tight text-slate-900 dark:text-zinc-100">
+              <div className="text-2xl font-black font-mono tracking-tight text-[#1C2727]">
                 {order.invoiceNumber}
               </div>
-              <div className="text-xs text-slate-500 mt-1">Date: {formatDate(order.date)}</div>
+              <div className="text-xs text-slate-500 mt-1 font-medium">Date: {formatDate(order.date)}</div>
               <div className="mt-2 flex sm:justify-end gap-2">
-                <span
-                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    order.paymentStatus === "paid"
-                      ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900"
-                      : "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900"
-                  }`}
-                >
-                  <ShieldCheck className="w-3 h-3" />
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#EAF4F4] text-[#165353] border border-[#228181]/20">
+                  <ShieldCheck className="w-3 h-3 text-[#228181]" />
                   {order.paymentStatus.toUpperCase()}
                 </span>
-                <span
-                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    order.status === "delivered"
-                      ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900"
-                      : "bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900"
-                  }`}
-                >
-                  <Truck className="w-3 h-3" />
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FAF0F4] text-[#7A2D4C] border border-[#D78EAB]/20">
+                  <Truck className="w-3 h-3 text-[#D78EAB]" />
                   {order.status.toUpperCase()}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Billed To & Dispatched From */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-xs sm:text-sm">
+          {/* Parties Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-xs">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                Billed To (Client)
+              <div className="font-bold uppercase tracking-wider text-slate-500 mb-1">
+                Billed To Client:
               </div>
-              <div className="font-bold text-slate-900 dark:text-zinc-100 text-base">
+              <div className="font-bold text-sm text-[#1C2727]">
                 {order.customerCompany}
               </div>
-              <div className="text-slate-600 dark:text-zinc-400 mt-0.5">Attn: {order.customerName}</div>
-              {customer && (
-                <>
-                  <div className="text-slate-500 mt-1">{customer.email} • {customer.phone}</div>
-                  <div className="text-slate-500">{customer.city}, India</div>
-                  {customer.gstNumber && (
-                    <div className="text-slate-500 font-mono mt-0.5">GSTIN: {customer.gstNumber}</div>
-                  )}
-                </>
+              <div className="text-slate-600 mt-0.5 font-medium">Attn: {order.customerName}</div>
+              <div className="text-slate-500 mt-0.5 font-medium">{customer?.email}</div>
+              <div className="text-slate-500 font-medium">{customer?.phone}</div>
+              {customer?.gstNumber && (
+                <div className="text-slate-600 mt-1 font-mono font-bold">
+                  GSTIN: {customer.gstNumber}
+                </div>
               )}
             </div>
 
             <div className="sm:text-right">
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                Fulfilled & Dispatched From
+              <div className="font-bold uppercase tracking-wider text-slate-500 mb-1">
+                Fulfilled From Facility:
               </div>
-              <div className="font-semibold text-slate-900 dark:text-zinc-100">
-                {godown?.name || "Central Logistics Hub"}
+              <div className="font-bold text-sm text-[#1C2727]">
+                {godown?.name || "Central Warehouse Hub"}
               </div>
-              <div className="text-slate-500 mt-0.5">{godown?.location || "Main Warehouse"}</div>
-              <div className="text-slate-500 font-mono mt-0.5">Hub ID: {godown?.code || "WH-01"}</div>
+              <div className="text-slate-600 mt-0.5 font-medium">Code: {godown?.code}</div>
+              <div className="text-slate-500 mt-0.5 font-medium">{godown?.location}</div>
+              <div className="text-slate-500 font-medium">Facility Manager: {godown?.manager}</div>
             </div>
           </div>
 
-          {/* Line items table */}
-          <div>
-            <table className="w-full text-left border-collapse">
+          {/* Items Table */}
+          <div className="rounded-xl border border-[#EAE4E3] overflow-hidden">
+            <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-zinc-800 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                  <th className="py-2.5">Item & SKU</th>
-                  <th className="py-2.5 text-center">Qty</th>
-                  <th className="py-2.5 text-right">Unit Price</th>
-                  <th className="py-2.5 text-right">Amount</th>
+                <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] font-bold text-slate-500">
+                  <th className="py-2.5 px-3">Item Description</th>
+                  <th className="py-2.5 px-3">SKU</th>
+                  <th className="py-2.5 px-3 text-center">Qty</th>
+                  <th className="py-2.5 px-3 text-right">Unit Price</th>
+                  <th className="py-2.5 px-3 text-right">Total</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/60 text-xs sm:text-sm">
+              <tbody className="divide-y divide-[#EAE4E3]/70">
                 {order.items.map((item, index) => (
                   <tr key={index}>
-                    <td className="py-3">
-                      <div className="font-medium text-slate-900 dark:text-zinc-100">{item.itemName}</div>
-                      <div className="text-xs font-mono text-slate-400">{item.sku}</div>
+                    <td className="py-3 px-3 font-bold text-[#1C2727]">{item.itemName}</td>
+                    <td className="py-3 px-3 font-mono text-slate-500">{item.sku}</td>
+                    <td className="py-3 px-3 text-center font-bold text-[#1C2727]">{item.quantity}</td>
+                    <td className="py-3 px-3 text-right font-mono text-slate-700">
+                      {formatCurrency(item.unitPrice)}
                     </td>
-                    <td className="py-3 text-center font-medium">{item.quantity}</td>
-                    <td className="py-3 text-right">{formatCurrency(item.unitPrice)}</td>
-                    <td className="py-3 text-right font-medium">{formatCurrency(item.total)}</td>
+                    <td className="py-3 px-3 text-right font-mono font-bold text-[#1C2727]">
+                      {formatCurrency(item.total)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          {/* Totals Breakdown */}
-          <div className="flex justify-end pt-4 border-t border-slate-200 dark:border-zinc-800">
-            <div className="w-full sm:w-72 space-y-2 text-xs sm:text-sm">
-              <div className="flex justify-between text-slate-500">
-                <span>Subtotal</span>
-                <span>{formatCurrency(order.subtotal)}</span>
+          {/* Totals */}
+          <div className="flex justify-end text-xs">
+            <div className="w-64 space-y-2">
+              <div className="flex justify-between text-slate-600 font-medium">
+                <span>Subtotal:</span>
+                <span className="font-mono font-bold text-[#1C2727]">
+                  {formatCurrency(order.subtotal)}
+                </span>
               </div>
-              <div className="flex justify-between text-slate-500">
-                <span>GST Tax (18%)</span>
-                <span>{formatCurrency(order.taxAmount)}</span>
+              <div className="flex justify-between text-slate-600 font-medium">
+                <span>GST Tax (18%):</span>
+                <span className="font-mono font-bold text-[#1C2727]">
+                  {formatCurrency(order.taxAmount)}
+                </span>
               </div>
               {order.discountAmount > 0 && (
-                <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
-                  <span>Special Discount</span>
-                  <span>-{formatCurrency(order.discountAmount)}</span>
+                <div className="flex justify-between text-[#AD597B] font-bold">
+                  <span>Discount:</span>
+                  <span className="font-mono">-{formatCurrency(order.discountAmount)}</span>
                 </div>
               )}
-              <div className="pt-2 border-t border-slate-200 dark:border-zinc-800 flex justify-between font-bold text-base text-slate-900 dark:text-zinc-100">
-                <span>Grand Total</span>
-                <span className="text-[#228181] font-black">
+              <div className="pt-2 border-t border-[#EAE4E3] flex justify-between font-black text-sm text-[#1C2727]">
+                <span>Total Amount:</span>
+                <span className="font-mono text-base text-[#165353]">
                   {formatCurrency(order.totalAmount)}
                 </span>
               </div>
             </div>
           </div>
 
+          {/* Notes & Footer */}
           {order.notes && (
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-800/40 border border-slate-200 dark:border-zinc-800 text-xs text-slate-600 dark:text-zinc-400">
-              <span className="font-semibold text-slate-700 dark:text-zinc-300">Order Notes: </span>
-              {order.notes}
+            <div className="p-3.5 rounded-xl bg-[#FAF8F7] border border-[#EAE4E3] text-xs">
+              <span className="font-bold text-slate-600">Order Notes: </span>
+              <span className="text-slate-600">{order.notes}</span>
             </div>
           )}
+        </div>
 
-          {/* Status quick switcher in modal footer */}
-          <div className="pt-6 border-t border-slate-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-4 text-xs">
-            <div className="flex items-center gap-3">
-              <span className="text-slate-500 font-medium">Update Fulfillment:</span>
-              <select
-                value={order.status}
-                onChange={(e) => updateSalesStatus(order.id, e.target.value as SalesStatus)}
-                className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100"
-              >
-                <option value="pending">Pending</option>
-                <option value="shipped">Shipped</option>
-                <option value="delivered">Delivered</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="text-slate-500 font-medium">Update Payment:</span>
-              <select
-                value={order.paymentStatus}
-                onChange={(e) => updatePaymentStatus(order.id, e.target.value as PaymentStatus)}
-                className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100"
-              >
-                <option value="paid">Paid</option>
-                <option value="partial">Partial</option>
-                <option value="unpaid">Unpaid</option>
-              </select>
-            </div>
+        {/* Footer Status Updater */}
+        <div className="p-4 border-t border-[#EAE4E3] bg-[#FAF8F7] flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-600">Update Status:</span>
+            <select
+              value={order.status}
+              onChange={(e) => updateSalesStatus(order.id, e.target.value as any)}
+              className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[#EAE4E3] bg-white text-[#1C2727] focus:ring-1 focus:ring-[#228181]"
+            >
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
           </div>
+
+          <button
+            onClick={onClose}
+            className="px-4 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-[#1C2727] bg-white border border-[#DDD6D5] hover:bg-[#FAF8F7] active:scale-95 transition-all"
+          >
+            Close Window
+          </button>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { useInventory } from "@/context/InventoryContext";
-import { Item, StockChangeType } from "@/types/inventory";
+import { Item } from "@/types/inventory";
 import {
   Search,
   Package,
@@ -10,13 +10,7 @@ import {
   Sliders,
   Edit2,
   Trash2,
-  AlertTriangle,
   History,
-  ArrowUpRight,
-  ArrowDownRight,
-  Filter,
-  CheckCircle2,
-  Boxes,
 } from "lucide-react";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 
@@ -73,32 +67,51 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
     (i) => i.status === "low_stock" || i.status === "out_of_stock"
   ).length;
 
+  const getCategoryBadge = (category: string) => {
+    switch (category) {
+      case "Laptops & Desktops":
+        return "bg-[#EAF4F4] text-[#165353] border border-[#228181]/25";
+      case "Processors & GPUs":
+        return "bg-[#FAF0F4] text-[#7A2D4C] border border-[#D78EAB]/25";
+      case "Monitors & Displays":
+        return "bg-[#FAF7F0] text-[#785E22] border border-[#E0D8C3]";
+      case "Storage & NAS":
+        return "bg-[#EEF7F7] text-[#1E5D61] border border-[#A1C7C7]/30";
+      case "Networking Gear":
+        return "bg-[#F8F1FA] text-[#69397D] border border-[#D9B5E6]/40";
+      case "Peripherals & Accessories":
+        return "bg-[#FAF4F0] text-[#7B4D25] border border-[#F2CBB0]/40";
+      default:
+        return "bg-[#F4F1EE] text-slate-700 border border-[#DDD6D5]";
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Top Sub-Tab Switcher */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-zinc-800 pb-4">
-        <div className="flex items-center gap-2 p-1 bg-[#F0ECEB] rounded-xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE4E3] pb-4">
+        <div className="flex items-center gap-1.5 p-1 bg-[#EAE4E3]/70 rounded-xl border border-[#DDD6D5]">
           <button
             onClick={() => setActiveSubTab("catalog")}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-150 active:scale-95 ${
               activeSubTab === "catalog"
-                ? "bg-white text-[#1C2727] shadow-xs"
-                : "text-slate-500 hover:text-[#1C2727]"
+                ? "bg-white text-[#1C2727] shadow-sm font-bold"
+                : "text-slate-600 hover:text-[#1C2727]"
             }`}
           >
-            <Package className="w-4 h-4" />
+            <Package className="w-4 h-4 text-[#228181]" />
             <span>Active Catalog ({items.length} SKUs)</span>
           </button>
 
           <button
             onClick={() => setActiveSubTab("history")}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-150 active:scale-95 ${
               activeSubTab === "history"
-                ? "bg-white text-[#1C2727] shadow-xs"
-                : "text-slate-500 hover:text-[#1C2727]"
+                ? "bg-white text-[#1C2727] shadow-sm font-bold"
+                : "text-slate-600 hover:text-[#1C2727]"
             }`}
           >
-            <History className="w-4 h-4" />
+            <History className="w-4 h-4 text-[#D78EAB]" />
             <span>Stock History &amp; Audit Trail</span>
           </button>
         </div>
@@ -106,10 +119,10 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
         {activeSubTab === "catalog" && (
           <button
             onClick={() => onOpenAddItem()}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs sm:text-sm font-bold text-white bg-[#228181] hover:bg-[#1A6868] active:scale-95 rounded-xl shadow-xs hover:shadow-md transition-all duration-150"
           >
             <Plus className="w-4 h-4" />
-            Add New Product (SKU)
+            <span>Add New Product (SKU)</span>
           </button>
         )}
       </div>
@@ -121,22 +134,22 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
             {/* Search */}
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by SKU, product name, or category..."
-                className="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-xl border border-[#ece8df] dark:border-[#2a253f] bg-white dark:bg-[#1c182b] text-slate-800 dark:text-zinc-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] focus:border-[#228181] transition-all"
               />
             </div>
 
             {/* Filter Dropdowns */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2.5">
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-3 py-2 text-xs rounded-xl border border-[#ece8df] dark:border-[#2a253f] bg-white dark:bg-[#1c182b] text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all cursor-pointer"
               >
                 <option value="all">All Categories</option>
                 {categories.map((c) => (
@@ -149,7 +162,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 text-xs rounded-xl border border-[#ece8df] dark:border-[#2a253f] bg-white dark:bg-[#1c182b] text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all cursor-pointer"
               >
                 <option value="all">All Stock Statuses</option>
                 <option value="in_stock">In Stock</option>
@@ -160,7 +173,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
               <select
                 value={godownFilter}
                 onChange={(e) => setGodownFilter(e.target.value)}
-                className="px-3 py-2 text-xs rounded-xl border border-[#ece8df] dark:border-[#2a253f] bg-white dark:bg-[#1c182b] text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all cursor-pointer"
               >
                 <option value="all">All Godowns</option>
                 {godowns.map((g) => (
@@ -177,22 +190,22 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                    <th className="py-3 px-4">SKU / Item</th>
-                    <th className="py-3 px-4">Category</th>
-                    <th className="py-3 px-4">Godown Location</th>
-                    <th className="py-3 px-4 text-center">Available Stock</th>
-                    <th className="py-3 px-4 text-center">Threshold</th>
-                    <th className="py-3 px-4 text-right">Cost (₹)</th>
-                    <th className="py-3 px-4 text-right">Retail (₹)</th>
-                    <th className="py-3 px-4 text-center">Status</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
+                  <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    <th className="py-3.5 px-4">SKU / Item</th>
+                    <th className="py-3.5 px-4">Category</th>
+                    <th className="py-3.5 px-4">Godown Location</th>
+                    <th className="py-3.5 px-4 text-center">Available Stock</th>
+                    <th className="py-3.5 px-4 text-center">Threshold</th>
+                    <th className="py-3.5 px-4 text-right">Cost (₹)</th>
+                    <th className="py-3.5 px-4 text-right">Retail (₹)</th>
+                    <th className="py-3.5 px-4 text-center">Status</th>
+                    <th className="py-3.5 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/60 text-xs sm:text-sm">
+                <tbody className="divide-y divide-[#EAE4E3]/70 text-xs sm:text-sm">
                   {filteredItems.length === 0 ? (
                     <tr>
-                      <td colSpan={9} className="py-12 text-center text-slate-400 text-xs">
+                      <td colSpan={9} className="py-12 text-center text-slate-500 text-xs font-medium">
                         No products match your search or filter criteria.
                       </td>
                     </tr>
@@ -208,96 +221,108 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
                       return (
                         <tr
                           key={item.id}
-                          className="hover:bg-slate-50/80 dark:hover:bg-zinc-800/40 transition-colors"
+                          className="hover:bg-[#FAF6F4] active:bg-[#F2ECE9] transition-colors duration-150 cursor-pointer"
                         >
                           {/* SKU & Name */}
-                          <td className="py-3 px-4">
-                            <div className="font-semibold text-slate-900 dark:text-zinc-100">
+                          <td className="py-3.5 px-4">
+                            <div className="font-bold text-[#1C2727]">
                               {item.name}
                             </div>
-                            <div className="text-[11px] font-mono text-slate-400">
+                            <div className="text-[11px] font-mono text-slate-500 font-medium">
                               {item.sku}
                             </div>
                           </td>
 
-                          {/* Category */}
-                          <td className="py-3 px-4 text-slate-500 text-xs">
-                            <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300">
+                          {/* Category (Soft Pastel Pill - NO BLACK) */}
+                          <td className="py-3.5 px-4">
+                            <span
+                              className={`inline-block px-2.5 py-1 rounded-md text-[11px] font-bold ${getCategoryBadge(
+                                item.category
+                              )}`}
+                            >
                               {item.category}
                             </span>
                           </td>
 
                           {/* Godown */}
-                          <td className="py-3 px-4 text-slate-500 text-xs">
+                          <td className="py-3.5 px-4 text-slate-700 font-medium text-xs">
                             {godown?.name || "Central Warehouse"}
                           </td>
 
                           {/* Available Stock */}
-                          <td className="py-3 px-4 text-center">
-                            <div className="font-bold text-sm font-mono text-slate-900 dark:text-zinc-100">
+                          <td className="py-3.5 px-4 text-center">
+                            <div className="font-black text-sm font-mono text-[#1C2727]">
                               {item.currentStock} {item.unit}
                             </div>
                           </td>
 
                           {/* Min Threshold */}
-                          <td className="py-3 px-4 text-center text-slate-400 text-xs font-mono">
+                          <td className="py-3.5 px-4 text-center text-slate-500 text-xs font-mono font-semibold">
                             {item.minStockLevel} {item.unit}
                           </td>
 
                           {/* Cost */}
-                          <td className="py-3 px-4 text-right font-mono text-slate-500 text-xs">
+                          <td className="py-3.5 px-4 text-right font-mono text-slate-600 font-semibold text-xs">
                             {formatCurrency(item.costPrice)}
                           </td>
 
                           {/* Retail Price */}
-                          <td className="py-3 px-4 text-right font-mono font-semibold text-slate-900 dark:text-zinc-100">
+                          <td className="py-3.5 px-4 text-right font-mono font-black text-[#1C2727]">
                             {formatCurrency(item.sellingPrice)}
-                            <div className="text-[10px] text-emerald-600 dark:text-emerald-400">
+                            <div className="text-[10px] text-[#165353] font-bold">
                               +{marginPercent}% margin
                             </div>
                           </td>
 
                           {/* Status */}
-                          <td className="py-3 px-4 text-center">
+                          <td className="py-3.5 px-4 text-center">
                             <span
-                              className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
+                              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold ${
                                 isOut
-                                  ? "bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900"
+                                  ? "bg-[#FAF0F4] text-[#AD597B] border border-[#F0D5DF]"
                                   : isLow
-                                  ? "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900"
-                                  : "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900"
+                                  ? "bg-[#FFF6F0] text-[#B85D19] border border-[#F2CBB0]"
+                                  : "bg-[#EAF4F4] text-[#165353] border border-[#228181]/20"
                               }`}
                             >
                               <span
                                 className={`w-1.5 h-1.5 rounded-full ${
-                                  isOut ? "bg-rose-500" : isLow ? "bg-amber-500" : "bg-emerald-500"
+                                  isOut
+                                    ? "bg-[#AD597B]"
+                                    : isLow
+                                    ? "bg-[#B85D19]"
+                                    : "bg-[#228181]"
                                 }`}
                               />
-                              {isOut ? "OUT OF STOCK" : isLow ? "LOW STOCK" : "IN STOCK"}
+                              {item.status.replace("_", " ").toUpperCase()}
                             </span>
                           </td>
 
                           {/* Actions */}
-                          <td className="py-3 px-4 text-right">
-                            <div className="inline-flex items-center gap-1">
+                          <td className="py-3.5 px-4 text-right">
+                            <div className="flex items-center justify-end gap-1">
                               <button
                                 onClick={() => onOpenAdjustStock(item)}
-                                title="Adjust Physical Stock (+ / -)"
-                                className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors"
+                                className="p-1.5 rounded-lg text-slate-500 hover:text-[#228181] hover:bg-[#EAF4F4] active:scale-90 transition-all"
+                                title="Adjust Stock Quantity"
                               >
                                 <Sliders className="w-4 h-4" />
                               </button>
                               <button
                                 onClick={() => onOpenAddItem(item)}
+                                className="p-1.5 rounded-lg text-slate-500 hover:text-[#228181] hover:bg-[#EAF4F4] active:scale-90 transition-all"
                                 title="Edit Product Details"
-                                className="p-1.5 rounded-lg text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-colors"
                               >
                                 <Edit2 className="w-4 h-4" />
                               </button>
                               <button
-                                onClick={() => deleteItem(item.id)}
-                                title="Remove SKU"
-                                className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors"
+                                onClick={() => {
+                                  if (confirm(`Delete SKU ${item.sku}?`)) {
+                                    deleteItem(item.id);
+                                  }
+                                }}
+                                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 active:scale-90 transition-all"
+                                title="Delete Item"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -314,19 +339,19 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
         </div>
       )}
 
-      {/* STOCK HISTORY / AUDIT TRAIL VIEW */}
+      {/* HISTORY VIEW */}
       {activeSubTab === "history" && (
         <div className="space-y-4">
           {/* History Search & Type Filters */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search history by item, SKU, reference ID or reason..."
-                className="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] focus:border-[#228181] transition-all"
               />
             </div>
 
@@ -334,7 +359,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
               <select
                 value={historyTypeFilter}
                 onChange={(e) => setHistoryTypeFilter(e.target.value)}
-                className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all cursor-pointer"
               >
                 <option value="all">All Movement Types</option>
                 <option value="purchase_received">Purchase Received (Stock In)</option>
@@ -351,21 +376,21 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                    <th className="py-3 px-4">Timestamp</th>
-                    <th className="py-3 px-4">Item & SKU</th>
-                    <th className="py-3 px-4">Change Event</th>
-                    <th className="py-3 px-4 text-center">Delta (Qty)</th>
-                    <th className="py-3 px-4 text-center">Balance</th>
-                    <th className="py-3 px-4">Document Ref</th>
-                    <th className="py-3 px-4">Facility</th>
-                    <th className="py-3 px-4">Audit Memo / Notes</th>
+                  <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    <th className="py-3.5 px-4">Timestamp</th>
+                    <th className="py-3.5 px-4">Item &amp; SKU</th>
+                    <th className="py-3.5 px-4">Change Event</th>
+                    <th className="py-3.5 px-4 text-center">Delta (Qty)</th>
+                    <th className="py-3.5 px-4 text-center">Balance</th>
+                    <th className="py-3.5 px-4">Document Ref</th>
+                    <th className="py-3.5 px-4">Facility</th>
+                    <th className="py-3.5 px-4">Audit Memo / Notes</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/60 text-xs sm:text-sm">
+                <tbody className="divide-y divide-[#EAE4E3]/70 text-xs sm:text-sm">
                   {filteredHistory.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="py-12 text-center text-slate-400 text-xs">
+                      <td colSpan={8} className="py-12 text-center text-slate-500 text-xs font-medium">
                         No audit history logs match your search.
                       </td>
                     </tr>
@@ -378,32 +403,34 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
                       return (
                         <tr
                           key={entry.id}
-                          className="hover:bg-slate-50/80 dark:hover:bg-zinc-800/40 transition-colors"
+                          className="hover:bg-[#FAF6F4] active:bg-[#F2ECE9] transition-colors duration-150 cursor-pointer"
                         >
                           {/* Timestamp */}
-                          <td className="py-3 px-4 text-slate-500 text-xs whitespace-nowrap">
+                          <td className="py-3.5 px-4 text-slate-600 text-xs whitespace-nowrap font-medium">
                             {formatDateTime(entry.timestamp)}
                           </td>
 
                           {/* Item & SKU */}
-                          <td className="py-3 px-4">
-                            <div className="font-semibold text-slate-900 dark:text-zinc-100">
+                          <td className="py-3.5 px-4">
+                            <div className="font-bold text-[#1C2727]">
                               {entry.itemName}
                             </div>
-                            <div className="text-[11px] font-mono text-slate-400">{entry.sku}</div>
+                            <div className="text-[11px] font-mono text-slate-500 font-medium">
+                              {entry.sku}
+                            </div>
                           </td>
 
                           {/* Event Type */}
-                          <td className="py-3 px-4">
+                          <td className="py-3.5 px-4">
                             <span
-                              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium ${
+                              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold ${
                                 isPurchase
-                                  ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900"
+                                  ? "bg-[#EAF4F4] text-[#165353] border border-[#228181]/25"
                                   : isSale
-                                  ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900"
+                                  ? "bg-[#FAF0F4] text-[#7A2D4C] border border-[#D78EAB]/25"
                                   : isAdjustment
-                                  ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900"
-                                  : "bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300"
+                                  ? "bg-[#EEF7F7] text-[#1E5D61] border border-[#A1C7C7]/30"
+                                  : "bg-[#F4F1EE] text-slate-700 border border-[#DDD6D5]"
                               }`}
                             >
                               {entry.changeType.replace("_", " ").toUpperCase()}
@@ -411,13 +438,13 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
                           </td>
 
                           {/* Delta */}
-                          <td className="py-3 px-4 text-center font-mono font-bold">
+                          <td className="py-3.5 px-4 text-center font-mono font-bold">
                             <span
                               className={
                                 entry.quantityDelta > 0
-                                  ? "text-emerald-600 dark:text-emerald-400"
+                                  ? "text-[#165353]"
                                   : entry.quantityDelta < 0
-                                  ? "text-rose-600 dark:text-rose-400"
+                                  ? "text-[#AD597B]"
                                   : "text-slate-500"
                               }
                             >
@@ -426,22 +453,22 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
                           </td>
 
                           {/* Balance */}
-                          <td className="py-3 px-4 text-center font-mono text-slate-900 dark:text-zinc-100 font-semibold">
+                          <td className="py-3.5 px-4 text-center font-mono text-[#1C2727] font-black">
                             {entry.resultingStock}
                           </td>
 
                           {/* Document Ref */}
-                          <td className="py-3 px-4 font-mono text-xs text-indigo-600 dark:text-indigo-400 font-medium">
+                          <td className="py-3.5 px-4 font-mono text-xs text-[#228181] font-bold">
                             {entry.referenceId}
                           </td>
 
                           {/* Warehouse */}
-                          <td className="py-3 px-4 text-slate-500 text-xs">
+                          <td className="py-3.5 px-4 text-slate-700 text-xs font-medium">
                             {entry.godownName}
                           </td>
 
                           {/* Audit Notes */}
-                          <td className="py-3 px-4 text-slate-500 text-xs max-w-xs truncate">
+                          <td className="py-3.5 px-4 text-slate-600 text-xs max-w-xs truncate font-medium">
                             {entry.notes}
                           </td>
                         </tr>

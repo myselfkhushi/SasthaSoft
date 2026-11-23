@@ -4,124 +4,131 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useInventory } from "@/context/InventoryContext";
 import {
   Search,
-  Package,
-  ShoppingCart,
-  Truck,
-  RotateCcw,
-  ArrowRight,
   PlusCircle,
+  Truck,
+  Package,
+  ArrowRightLeft,
+  LayoutDashboard,
+  ShoppingCart,
+  BarChart3,
   Building2,
-  X,
-  Layers,
+  Users,
+  RotateCcw,
+  Sparkles,
+  Command,
 } from "lucide-react";
 
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
-  onNavigate: (module: string) => void;
   onOpenCreateSale: () => void;
   onOpenCreatePO: () => void;
   onOpenAddItem: () => void;
   onOpenTransfer: () => void;
+  onNavigate: (module: string) => void;
 }
 
 export function CommandPalette({
   isOpen,
   onClose,
-  onNavigate,
   onOpenCreateSale,
   onOpenCreatePO,
   onOpenAddItem,
   onOpenTransfer,
+  onNavigate,
 }: CommandPaletteProps) {
   const { items, salesOrders, purchaseOrders, resetDemoData } = useInventory();
   const [query, setQuery] = useState("");
 
+  // Close on Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        if (isOpen) {
-          onClose();
-        } else {
-          // Open
-        }
-      }
-      if (e.key === "Escape" && isOpen) {
+      if (e.key === "Escape") {
         onClose();
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Filter items and orders based on query
+  // Reset query on open
+  useEffect(() => {
+    if (isOpen) setQuery("");
+  }, [isOpen]);
+
+  // Filtered lists for quick search
   const filteredItems = useMemo(() => {
-    if (!query.trim()) return [];
+    if (!query) return [];
     const q = query.toLowerCase();
-    return items.filter(
-      (item) =>
-        item.name.toLowerCase().includes(q) ||
-        item.sku.toLowerCase().includes(q) ||
-        item.category.toLowerCase().includes(q)
-    ).slice(0, 4);
+    return items
+      .filter(
+        (i) =>
+          i.name.toLowerCase().includes(q) ||
+          i.sku.toLowerCase().includes(q) ||
+          i.category.toLowerCase().includes(q)
+      )
+      .slice(0, 4);
   }, [items, query]);
 
   const filteredSales = useMemo(() => {
-    if (!query.trim()) return [];
+    if (!query) return [];
     const q = query.toLowerCase();
-    return salesOrders.filter(
-      (s) =>
-        s.invoiceNumber.toLowerCase().includes(q) ||
-        s.customerCompany.toLowerCase().includes(q) ||
-        s.customerName.toLowerCase().includes(q)
-    ).slice(0, 3);
+    return salesOrders
+      .filter(
+        (s) =>
+          s.invoiceNumber.toLowerCase().includes(q) ||
+          s.customerName.toLowerCase().includes(q) ||
+          s.customerCompany.toLowerCase().includes(q)
+      )
+      .slice(0, 3);
   }, [salesOrders, query]);
 
-  const filteredPurchases = useMemo(() => {
-    if (!query.trim()) return [];
+  const filteredPOs = useMemo(() => {
+    if (!query) return [];
     const q = query.toLowerCase();
-    return purchaseOrders.filter(
-      (p) =>
-        p.poNumber.toLowerCase().includes(q) ||
-        p.supplierCompany.toLowerCase().includes(q)
-    ).slice(0, 3);
+    return purchaseOrders
+      .filter(
+        (p) =>
+          p.poNumber.toLowerCase().includes(q) ||
+          p.supplierCompany.toLowerCase().includes(q)
+      )
+      .slice(0, 3);
   }, [purchaseOrders, query]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 px-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-xl bg-white border border-[#EAE4E3] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
-        {/* Search Input */}
-        <div className="flex items-center px-4 py-3.5 border-b border-[#EAE4E3]">
-          <Search className="w-5 h-5 text-slate-400 mr-3 shrink-0" />
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150">
+      <div
+        className="fixed inset-0"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      <div className="relative w-full max-w-xl bg-white border border-[#EAE4E3] rounded-2xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[75vh]">
+        {/* Search Input Box */}
+        <div className="flex items-center px-4 py-3.5 border-b border-[#EAE4E3] bg-[#FAF8F7]">
+          <Search className="w-5 h-5 text-[#228181] shrink-0 mr-3" />
           <input
             type="text"
+            autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Type a command, product name, SKU, invoice #, or supplier..."
-            autoFocus
-            className="w-full bg-transparent text-sm sm:text-base outline-none text-[#1C2727] placeholder:text-slate-400"
+            className="flex-1 bg-transparent text-sm text-[#1C2727] placeholder:text-slate-400 focus:outline-none font-medium"
           />
-          {query && (
-            <button
-              onClick={() => setQuery("")}
-              className="p-1 text-slate-400 hover:text-slate-600"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-          <span className="hidden sm:inline-block text-[11px] font-medium text-slate-400 bg-[#F4F0EF] px-2 py-0.5 rounded ml-2">
+          <kbd className="px-2 py-0.5 rounded text-[11px] font-mono text-slate-500 bg-white border border-[#DDD6D5] shadow-xs">
             ESC
-          </span>
+          </kbd>
         </div>
 
         {/* Content list */}
-        <div className="overflow-y-auto p-2 space-y-4 text-sm divide-y divide-slate-100 dark:divide-zinc-800/60">
+        <div className="overflow-y-auto p-3 space-y-4 text-sm divide-y divide-[#EAE4E3]/60">
           {/* Quick Actions */}
           <div className="space-y-1">
-            <div className="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <div className="px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-500">
               Quick Actions
             </div>
             <button
@@ -129,13 +136,13 @@ export function CommandPalette({
                 onClose();
                 onOpenCreateSale();
               }}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-zinc-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-left"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[#1C2727] hover:bg-[#EAF4F4] hover:text-[#165353] active:scale-[0.99] transition-all text-left group"
             >
               <div className="flex items-center gap-2.5">
-                <PlusCircle className="w-4 h-4 text-indigo-500" />
-                <span className="font-medium">New Sales Order / Invoice</span>
+                <PlusCircle className="w-4 h-4 text-[#228181]" />
+                <span className="font-semibold text-xs sm:text-sm">New Sales Order / Invoice</span>
               </div>
-              <span className="text-xs text-slate-400">Sale</span>
+              <span className="text-xs font-bold text-[#228181] bg-[#EAF4F4] px-2 py-0.5 rounded">Sale</span>
             </button>
 
             <button
@@ -143,13 +150,13 @@ export function CommandPalette({
                 onClose();
                 onOpenCreatePO();
               }}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-zinc-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[#1C2727] hover:bg-[#FAF0F4] hover:text-[#7A2D4C] active:scale-[0.99] transition-all text-left group"
             >
               <div className="flex items-center gap-2.5">
-                <Truck className="w-4 h-4 text-emerald-500" />
-                <span className="font-medium">New Purchase Order (Restock)</span>
+                <Truck className="w-4 h-4 text-[#D78EAB]" />
+                <span className="font-semibold text-xs sm:text-sm">New Purchase Order (Restock)</span>
               </div>
-              <span className="text-xs text-slate-400">Purchase</span>
+              <span className="text-xs font-bold text-[#7A2D4C] bg-[#FAF0F4] px-2 py-0.5 rounded">Purchase</span>
             </button>
 
             <button
@@ -157,13 +164,13 @@ export function CommandPalette({
                 onClose();
                 onOpenAddItem();
               }}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors text-left"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[#1C2727] hover:bg-[#FAF6F4] hover:text-[#228181] active:scale-[0.99] transition-all text-left"
             >
               <div className="flex items-center gap-2.5">
-                <Package className="w-4 h-4 text-amber-500" />
-                <span className="font-medium">Add New Inventory Item (SKU)</span>
+                <Package className="w-4 h-4 text-[#B85D19]" />
+                <span className="font-semibold text-xs sm:text-sm">Add New Inventory Item (SKU)</span>
               </div>
-              <span className="text-xs text-slate-400">Catalog</span>
+              <span className="text-xs font-bold text-slate-500 bg-[#F4F1EE] px-2 py-0.5 rounded">Catalog</span>
             </button>
 
             <button
@@ -171,199 +178,116 @@ export function CommandPalette({
                 onClose();
                 onOpenTransfer();
               }}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors text-left"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[#1C2727] hover:bg-[#FAF6F4] hover:text-[#228181] active:scale-[0.99] transition-all text-left"
             >
               <div className="flex items-center gap-2.5">
-                <Building2 className="w-4 h-4 text-purple-500" />
-                <span className="font-medium">Transfer Stock Between Godowns</span>
+                <ArrowRightLeft className="w-4 h-4 text-[#165353]" />
+                <span className="font-semibold text-xs sm:text-sm">Transfer Stock Between Godowns</span>
               </div>
-              <span className="text-xs text-slate-400">Warehouse</span>
+              <span className="text-xs font-bold text-slate-500 bg-[#F4F1EE] px-2 py-0.5 rounded">Warehouse</span>
             </button>
           </div>
 
-          {/* Search Results: Products */}
-          {filteredItems.length > 0 && (
-            <div className="pt-2 space-y-1">
-              <div className="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                Products Matching &quot;{query}&quot;
-              </div>
-              {filteredItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    onClose();
-                    onNavigate("stock");
-                  }}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors text-left"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Package className="w-4 h-4 text-slate-400" />
-                    <div>
-                      <div className="font-medium">{item.name}</div>
-                      <div className="text-xs text-slate-400">
-                        {item.sku} • {item.currentStock} in stock • ₹{item.sellingPrice.toLocaleString("en-IN")}
-                      </div>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-slate-400" />
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Search Results: Invoices */}
-          {filteredSales.length > 0 && (
-            <div className="pt-2 space-y-1">
-              <div className="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                Invoices Matching &quot;{query}&quot;
-              </div>
-              {filteredSales.map((sale) => (
-                <button
-                  key={sale.id}
-                  onClick={() => {
-                    onClose();
-                    onNavigate("sales");
-                  }}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors text-left"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <ShoppingCart className="w-4 h-4 text-indigo-400" />
-                    <div>
-                      <div className="font-medium">{sale.invoiceNumber}</div>
-                      <div className="text-xs text-slate-400">
-                        {sale.customerCompany} • ₹{sale.totalAmount.toLocaleString("en-IN")} • {sale.status.toUpperCase()}
-                      </div>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-slate-400" />
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Search Results: Purchases */}
-          {filteredPurchases.length > 0 && (
-            <div className="pt-2 space-y-1">
-              <div className="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                Purchase Orders Matching &quot;{query}&quot;
-              </div>
-              {filteredPurchases.map((po) => (
-                <button
-                  key={po.id}
-                  onClick={() => {
-                    onClose();
-                    onNavigate("purchase");
-                  }}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors text-left"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Truck className="w-4 h-4 text-emerald-400" />
-                    <div>
-                      <div className="font-medium">{po.poNumber}</div>
-                      <div className="text-xs text-slate-400">
-                        {po.supplierCompany} • ₹{po.totalAmount.toLocaleString("en-IN")} • {po.status.toUpperCase()}
-                      </div>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-slate-400" />
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Navigation Shortcuts */}
-          <div className="pt-2 space-y-1">
-            <div className="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          {/* Module Navigation */}
+          <div className="pt-3 space-y-1">
+            <div className="px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-500">
               Go To Module
             </div>
-            <div className="grid grid-cols-2 gap-1">
+            <div className="grid grid-cols-2 gap-1.5">
               <button
                 onClick={() => {
                   onClose();
                   onNavigate("dashboard");
                 }}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 text-left"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-[#FAF6F4] hover:text-[#1C2727] active:scale-[0.98] transition-all text-left text-xs font-semibold"
               >
-                <Layers className="w-4 h-4 text-slate-400" />
+                <LayoutDashboard className="w-4 h-4 text-[#228181]" />
                 <span>Dashboard</span>
               </button>
+
               <button
                 onClick={() => {
                   onClose();
                   onNavigate("sales");
                 }}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 text-left"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-[#FAF6F4] hover:text-[#1C2727] active:scale-[0.98] transition-all text-left text-xs font-semibold"
               >
-                <ShoppingCart className="w-4 h-4 text-slate-400" />
+                <ShoppingCart className="w-4 h-4 text-[#228181]" />
                 <span>Sales Orders</span>
               </button>
+
               <button
                 onClick={() => {
                   onClose();
                   onNavigate("purchase");
                 }}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 text-left"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-[#FAF6F4] hover:text-[#1C2727] active:scale-[0.98] transition-all text-left text-xs font-semibold"
               >
-                <Truck className="w-4 h-4 text-slate-400" />
+                <Truck className="w-4 h-4 text-[#228181]" />
                 <span>Purchases</span>
               </button>
+
               <button
                 onClick={() => {
                   onClose();
                   onNavigate("stock");
                 }}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 text-left"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-[#FAF6F4] hover:text-[#1C2727] active:scale-[0.98] transition-all text-left text-xs font-semibold"
               >
-                <Package className="w-4 h-4 text-slate-400" />
-                <span>Stock & Ledger</span>
+                <Package className="w-4 h-4 text-[#228181]" />
+                <span>Stock &amp; Ledger</span>
               </button>
+
               <button
                 onClick={() => {
                   onClose();
                   onNavigate("reports");
                 }}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 text-left"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-[#FAF6F4] hover:text-[#1C2727] active:scale-[0.98] transition-all text-left text-xs font-semibold"
               >
-                <ArrowRight className="w-4 h-4 text-slate-400" />
-                <span>Analytics & Reports</span>
+                <BarChart3 className="w-4 h-4 text-[#228181]" />
+                <span>Analytics &amp; Reports</span>
               </button>
+
               <button
                 onClick={() => {
                   onClose();
                   onNavigate("godowns");
                 }}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 text-left"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-[#FAF6F4] hover:text-[#1C2727] active:scale-[0.98] transition-all text-left text-xs font-semibold"
               >
-                <Building2 className="w-4 h-4 text-slate-400" />
-                <span>Godowns & Facilities</span>
+                <Building2 className="w-4 h-4 text-[#228181]" />
+                <span>Godowns &amp; Facilities</span>
               </button>
             </div>
           </div>
 
           {/* Reset Demo State Option */}
-          <div className="pt-2">
+          <div className="pt-3">
             <button
               onClick={() => {
                 onClose();
                 resetDemoData();
               }}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors text-left"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 active:scale-[0.99] transition-all text-left"
             >
               <div className="flex items-center gap-2.5">
                 <RotateCcw className="w-4 h-4" />
-                <span>Reset Application to Clean Demo State</span>
+                <span className="font-semibold text-xs sm:text-sm">Reset Application to Clean Demo State</span>
               </div>
-              <span className="text-xs text-slate-400">Default Data</span>
+              <span className="text-xs text-slate-400 font-medium">Default Data</span>
             </button>
           </div>
         </div>
 
-        {/* Footer info */}
-        <div className="px-4 py-2 bg-slate-50 dark:bg-zinc-950 border-t border-slate-200 dark:border-zinc-800 text-xs text-slate-500 flex items-center justify-between">
+        {/* Footer info (Warm Cashmere / Light Theme - NO BLACK) */}
+        <div className="px-4 py-2.5 bg-[#FAF8F7] border-t border-[#EAE4E3] text-xs text-slate-600 flex items-center justify-between font-medium">
           <div className="flex items-center gap-2">
-            <span>Tip: Press <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-mono text-[10px]">Ctrl+K</kbd> anywhere</span>
+            <span>
+              Tip: Press <kbd className="px-1.5 py-0.5 rounded bg-white border border-[#DDD6D5] text-[#1C2727] font-mono text-[10px] font-bold shadow-xs">Ctrl+K</kbd> anywhere
+            </span>
           </div>
-          <span>SasthaSoft Trial Evaluation</span>
+          <span className="text-[#228181] font-bold">SasthaSoft Trial Evaluation</span>
         </div>
       </div>
     </div>

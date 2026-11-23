@@ -5,12 +5,10 @@ import { useInventory } from "@/context/InventoryContext";
 import {
   Building2,
   ArrowRightLeft,
-  Package,
   MapPin,
   Phone,
   User,
-  Plus,
-  CheckCircle2,
+  Boxes,
 } from "lucide-react";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 
@@ -23,27 +21,27 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
 
   return (
     <div className="space-y-6">
-      {/* Header and CTA */}
+      {/* Header and Transfer CTA */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-100">
-            Regional Warehouses &amp; Fulfillment Facilities
+          <h2 className="text-xl font-bold tracking-tight text-[#1C2727]">
+            Godowns &amp; Distribution Facilities
           </h2>
-          <p className="text-xs text-slate-500">
-            Monitor decentralized physical storage across India, capacity utilization, and inter-facility transfers.
+          <p className="text-xs text-slate-500 mt-0.5 font-medium">
+            Manage multi-warehouse capacity, regional distribution hubs, and inter-godown transfers.
           </p>
         </div>
 
         <button
           onClick={onOpenTransfer}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all shrink-0"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs sm:text-sm font-bold text-white bg-[#228181] hover:bg-[#1A6868] active:scale-95 rounded-xl shadow-xs hover:shadow-md transition-all duration-150 shrink-0"
         >
           <ArrowRightLeft className="w-4 h-4" />
-          Transfer Stock Between Godowns
+          <span>Transfer Stock Between Hubs</span>
         </button>
       </div>
 
-      {/* Godown Cards Grid */}
+      {/* Godowns Facilities Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {godowns.map((godown) => {
           const godownItems = items.filter((i) => i.godownId === godown.id);
@@ -60,26 +58,24 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
           return (
             <div
               key={godown.id}
-              className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(34,129,129,0.03)] flex flex-col justify-between gap-4"
+              className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(34,129,129,0.03)] hover:shadow-lg hover:border-[#228181]/40 hover:-translate-y-1 active:scale-[0.99] transition-all duration-200 flex flex-col justify-between gap-4 cursor-pointer"
             >
               <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400">
-                      <Building2 className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-sm text-slate-900 dark:text-zinc-100">
-                        {godown.name}
-                      </h3>
-                      <div className="text-[11px] font-mono text-purple-600 dark:text-purple-400 font-semibold">
-                        {godown.code}
-                      </div>
-                    </div>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="font-bold text-base text-[#1C2727]">
+                      {godown.name}
+                    </h3>
+                    <span className="font-mono text-xs font-bold text-[#165353] bg-[#EAF4F4] px-2 py-0.5 rounded border border-[#228181]/20 mt-1 inline-block">
+                      {godown.code}
+                    </span>
                   </div>
+                  <span className="p-2 rounded-xl bg-[#EAF4F4] text-[#165353] border border-[#228181]/15">
+                    <Building2 className="w-4 h-4 text-[#228181]" />
+                  </span>
                 </div>
 
-                <div className="mt-3 space-y-1.5 text-xs text-slate-500">
+                <div className="mt-4 space-y-1.5 text-xs text-slate-600 font-medium">
                   <div className="flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                     <span className="truncate">{godown.location}</span>
@@ -95,16 +91,16 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
                 </div>
 
                 {/* Capacity Progress Bar */}
-                <div className="mt-4 pt-4 border-t border-slate-100 dark:border-zinc-800 space-y-1.5">
+                <div className="mt-4 pt-4 border-t border-[#EAE4E3] space-y-1.5">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-500">Utilization:</span>
-                    <span className="font-bold text-slate-900 dark:text-zinc-100">
+                    <span className="text-slate-500 font-medium">Capacity Utilization:</span>
+                    <span className="font-bold text-[#1C2727]">
                       {totalUnitsStored} / {godown.capacityUnits} units ({capacityUsedPercent}%)
                     </span>
                   </div>
-                  <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-zinc-800 overflow-hidden">
+                  <div className="w-full h-2 rounded-full bg-[#EAE4E3] overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-purple-600 transition-all"
+                      className="h-full rounded-full bg-[#228181] transition-all"
                       style={{ width: `${Math.max(4, capacityUsedPercent)}%` }}
                     />
                   </div>
@@ -112,9 +108,9 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
               </div>
 
               {/* Bottom Valuation */}
-              <div className="pt-3 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-between text-xs">
-                <span className="text-slate-500">Active SKUs: {godownItems.length}</span>
-                <span className="font-bold font-mono text-indigo-600 dark:text-indigo-400">
+              <div className="pt-3 border-t border-[#EAE4E3] flex items-center justify-between text-xs">
+                <span className="text-slate-500 font-medium">Active SKUs: {godownItems.length}</span>
+                <span className="font-black font-mono text-[#165353]">
                   {formatCurrency(totalGodownValuation)}
                 </span>
               </div>
@@ -123,66 +119,71 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
         })}
       </div>
 
-      {/* Inter-Godown Transfers Log Table */}
+      {/* Recent Inter-Facility Transfers Log */}
       <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
         <div className="p-4 border-b border-[#EAE4E3] bg-[#FAF8F7] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ArrowRightLeft className="w-4 h-4 text-[#228181]" />
+            <Boxes className="w-4 h-4 text-[#228181]" />
             <h3 className="text-sm font-bold text-[#1C2727]">
-              Inter-Godown Transfer Manifest &amp; Log
+              Inter-Godown Transfer History Ledger
             </h3>
           </div>
-          <span className="text-xs text-slate-400">{transfers.length} transfers recorded</span>
+          <span className="text-xs text-slate-500 font-medium">
+            {transfers.length} Recorded Movements
+          </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse text-xs sm:text-sm">
             <thead>
-              <tr className="border-b border-[#EAE4E3] text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                <th className="py-3 px-4">Transfer #</th>
-                <th className="py-3 px-4">Date</th>
-                <th className="py-3 px-4">Product &amp; SKU</th>
-                <th className="py-3 px-4">From Origin Godown</th>
-                <th className="py-3 px-4">To Destination Godown</th>
-                <th className="py-3 px-4 text-center">Quantity</th>
-                <th className="py-3 px-4 text-center">Status</th>
-                <th className="py-3 px-4">Manifest Memo</th>
+              <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <th className="py-3.5 px-4">Transfer Date</th>
+                <th className="py-3.5 px-4">Item Transferred</th>
+                <th className="py-3.5 px-4">Source Hub</th>
+                <th className="py-3.5 px-4 text-center">Direction</th>
+                <th className="py-3.5 px-4">Destination Hub</th>
+                <th className="py-3.5 px-4 text-center">Quantity</th>
+                <th className="py-3.5 px-4">Status</th>
+                <th className="py-3.5 px-4">Memo</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/60 text-xs sm:text-sm">
+            <tbody className="divide-y divide-[#EAE4E3]/70">
               {transfers.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-8 text-center text-slate-400 text-xs">
-                    No inter-godown transfers recorded yet. Click &quot;Transfer Stock Between Godowns&quot; to authorize one!
+                  <td colSpan={8} className="py-10 text-center text-slate-500 text-xs font-medium">
+                    No inter-godown transfers have been logged yet.
                   </td>
                 </tr>
               ) : (
                 transfers.map((tr) => (
-                  <tr key={tr.id} className="hover:bg-slate-50/80 dark:hover:bg-zinc-800/40">
-                    <td className="py-3 px-4 font-mono font-bold text-purple-600 dark:text-purple-400">
-                      {tr.transferNumber}
+                  <tr
+                    key={tr.id}
+                    className="hover:bg-[#FAF6F4] active:bg-[#F2ECE9] transition-colors duration-150 cursor-pointer"
+                  >
+                    <td className="py-3.5 px-4 text-slate-600 text-xs whitespace-nowrap font-medium">
+                      {formatDateTime(tr.date)}
                     </td>
-                    <td className="py-3 px-4 text-slate-500 text-xs">{formatDateTime(tr.date)}</td>
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-slate-900 dark:text-zinc-100">{tr.itemName}</div>
-                      <div className="text-[11px] font-mono text-slate-400">{tr.sku}</div>
+                    <td className="py-3.5 px-4 font-bold text-[#1C2727]">
+                      {tr.itemName}
                     </td>
-                    <td className="py-3 px-4 text-slate-600 dark:text-zinc-300 font-medium">
-                      {tr.fromGodownName}
+                    <td className="py-3.5 px-4 text-slate-700 font-medium">{tr.fromGodownName}</td>
+                    <td className="py-3.5 px-4 text-center">
+                      <span className="inline-block p-1 rounded-full bg-[#EAF4F4] text-[#165353]">
+                        ➔
+                      </span>
                     </td>
-                    <td className="py-3 px-4 text-slate-600 dark:text-zinc-300 font-medium">
-                      {tr.toGodownName}
-                    </td>
-                    <td className="py-3 px-4 text-center font-mono font-bold text-slate-900 dark:text-zinc-100">
+                    <td className="py-3.5 px-4 text-slate-700 font-medium">{tr.toGodownName}</td>
+                    <td className="py-3.5 px-4 text-center font-bold font-mono text-[#1C2727]">
                       {tr.quantity} units
                     </td>
-                    <td className="py-3 px-4 text-center">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900">
-                        <CheckCircle2 className="w-3 h-3" />
+                    <td className="py-3.5 px-4">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF4F4] text-[#165353] border border-[#228181]/20">
                         {tr.status.toUpperCase()}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-slate-500 text-xs">{tr.notes || "Standard transfer"}</td>
+                    <td className="py-3.5 px-4 text-slate-500 text-xs max-w-xs truncate font-medium">
+                      {tr.notes}
+                    </td>
                   </tr>
                 ))
               )}

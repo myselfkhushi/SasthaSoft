@@ -31,24 +31,24 @@ export function AdjustStockModal({ isOpen, onClose, item }: AdjustStockModalProp
     adjustmentType === "add" ? item.currentStock + amount : Math.max(0, item.currentStock - amount);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="w-full max-w-md bg-white border border-[#EAE4E3] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#EAE4E3] bg-[#FAF8F7]">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 rounded-xl">
-              <Sliders className="w-5 h-5" />
+            <div className="p-2.5 bg-[#EAF4F4] text-[#165353] border border-[#228181]/20 rounded-xl">
+              <Sliders className="w-5 h-5 text-[#228181]" />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-slate-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-[#1C2727]">
                 Adjust Inventory Stock
               </h3>
-              <p className="text-xs text-slate-500 font-mono">{item.sku}</p>
+              <p className="text-xs text-slate-500 font-mono font-bold">{item.sku}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-[#EAE4E3]/60 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -57,25 +57,25 @@ export function AdjustStockModal({ isOpen, onClose, item }: AdjustStockModalProp
         {/* Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <div className="text-xs text-slate-500">Product</div>
-            <div className="text-sm font-semibold text-slate-900 dark:text-zinc-100 mt-0.5">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-500">Product</div>
+            <div className="text-sm font-bold text-[#1C2727] mt-0.5">
               {item.name}
             </div>
           </div>
 
           {/* Type Toggle */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
               Adjustment Type
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setAdjustmentType("add")}
-                className={`py-2 px-3 text-xs font-semibold rounded-xl border transition-colors ${
+                className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all active:scale-95 ${
                   adjustmentType === "add"
-                    ? "bg-emerald-50 dark:bg-emerald-950/50 border-emerald-500 text-emerald-700 dark:text-emerald-300"
-                    : "border-slate-200 dark:border-zinc-700 text-slate-600 dark:text-zinc-400"
+                    ? "bg-[#EAF4F4] border-[#228181] text-[#165353] shadow-xs"
+                    : "border-[#EAE4E3] bg-[#FAF8F7] text-slate-600 hover:bg-white"
                 }`}
               >
                 + Increase Stock
@@ -83,10 +83,10 @@ export function AdjustStockModal({ isOpen, onClose, item }: AdjustStockModalProp
               <button
                 type="button"
                 onClick={() => setAdjustmentType("remove")}
-                className={`py-2 px-3 text-xs font-semibold rounded-xl border transition-colors ${
+                className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all active:scale-95 ${
                   adjustmentType === "remove"
-                    ? "bg-rose-50 dark:bg-rose-950/50 border-rose-500 text-rose-700 dark:text-rose-300"
-                    : "border-slate-200 dark:border-zinc-700 text-slate-600 dark:text-zinc-400"
+                    ? "bg-[#FAF0F4] border-[#D78EAB] text-[#7A2D4C] shadow-xs"
+                    : "border-[#EAE4E3] bg-[#FAF8F7] text-slate-600 hover:bg-white"
                 }`}
               >
                 - Decrease Stock
@@ -96,7 +96,7 @@ export function AdjustStockModal({ isOpen, onClose, item }: AdjustStockModalProp
 
           {/* Amount */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
               Quantity to Adjust ({item.unit})
             </label>
             <input
@@ -105,52 +105,48 @@ export function AdjustStockModal({ isOpen, onClose, item }: AdjustStockModalProp
               required
               value={amount}
               onChange={(e) => setAmount(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-center font-bold"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
             />
+          </div>
+
+          {/* Calculated Output */}
+          <div className="p-3.5 rounded-xl bg-[#FAF8F7] border border-[#EAE4E3] flex items-center justify-between text-xs font-medium">
+            <span className="text-slate-600">Current: {item.currentStock} {item.unit}</span>
+            <span className="text-slate-400">➔</span>
+            <span className="font-bold text-sm font-mono text-[#165353]">
+              Resulting: {newStock} {item.unit}
+            </span>
           </div>
 
           {/* Reason */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-              Reason / Audit Reference
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              Reason / Audit Memo
             </label>
-            <select
+            <input
+              type="text"
+              required
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="Periodic physical audit variance">Periodic physical audit variance</option>
-              <option value="Damaged / broken goods write-off">Damaged / broken goods write-off</option>
-              <option value="Customer return restocked">Customer return restocked</option>
-              <option value="Promotional / marketing sample issued">Promotional sample issued</option>
-              <option value="Found unaccounted inventory">Found unaccounted inventory</option>
-            </select>
+              placeholder="e.g. Broken packaging, physical recount variance"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
+            />
           </div>
 
-          {/* Impact preview */}
-          <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-950/80 border border-slate-200 dark:border-zinc-800 text-xs flex items-center justify-between">
-            <span className="text-slate-500">Current Stock: <strong>{item.currentStock}</strong></span>
-            <span className="text-slate-400">➔</span>
-            <span className="font-bold text-slate-900 dark:text-zinc-100">
-              New Balance: <strong className="text-blue-600 dark:text-blue-400">{newStock}</strong> {item.unit}
-            </span>
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200 dark:border-zinc-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#EAE4E3]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl"
+              className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-[#1C2727] hover:bg-[#FAF8F7] active:scale-95 rounded-xl border border-[#DDD6D5] transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-[#228181] hover:bg-[#1A6868] active:scale-95 rounded-xl shadow-xs hover:shadow-md transition-all"
             >
               <Check className="w-4 h-4" />
-              Confirm Adjustment
+              <span>Record Stock Adjustment</span>
             </button>
           </div>
         </form>

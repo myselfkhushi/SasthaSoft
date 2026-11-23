@@ -11,76 +11,99 @@ interface AddItemModalProps {
   editItem?: Item | null;
 }
 
-export function AddItemModal({ isOpen, onClose, editItem }: AddItemModalProps) {
-  const { godowns, addItem, updateItem } = useInventory();
+const CATEGORIES = [
+  "Laptops & Desktops",
+  "Processors & GPUs",
+  "Monitors & Displays",
+  "Storage & NAS",
+  "Networking Gear",
+  "Peripherals & Accessories",
+];
 
-  const [sku, setSku] = useState("");
+export function AddItemModal({ isOpen, onClose, editItem }: AddItemModalProps) {
+  const { godowns, addItem, updateItem, notify } = useInventory();
+
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("Processors & GPUs");
+  const [sku, setSku] = useState("");
+  const [category, setCategory] = useState(CATEGORIES[0]);
   const [description, setDescription] = useState("");
   const [unit, setUnit] = useState("pcs");
-  const [costPrice, setCostPrice] = useState<number>(1000);
-  const [sellingPrice, setSellingPrice] = useState<number>(1500);
-  const [currentStock, setCurrentStock] = useState<number>(10);
-  const [minStockLevel, setMinStockLevel] = useState<number>(5);
+  const [costPrice, setCostPrice] = useState("");
+  const [sellingPrice, setSellingPrice] = useState("");
+  const [initialStock, setInitialStock] = useState("");
+  const [minStockLevel, setMinStockLevel] = useState("");
   const [godownId, setGodownId] = useState(godowns[0]?.id || "");
 
   useEffect(() => {
     if (editItem) {
-      setSku(editItem.sku);
       setName(editItem.name);
+      setSku(editItem.sku);
       setCategory(editItem.category);
       setDescription(editItem.description);
       setUnit(editItem.unit);
-      setCostPrice(editItem.costPrice);
-      setSellingPrice(editItem.sellingPrice);
-      setCurrentStock(editItem.currentStock);
-      setMinStockLevel(editItem.minStockLevel);
+      setCostPrice(editItem.costPrice.toString());
+      setSellingPrice(editItem.sellingPrice.toString());
+      setInitialStock(editItem.currentStock.toString());
+      setMinStockLevel(editItem.minStockLevel.toString());
       setGodownId(editItem.godownId);
     } else {
-      setSku(`SKU-${Math.floor(1000 + Math.random() * 9000)}`);
       setName("");
-      setCategory("Processors & GPUs");
+      setSku(`SKU-${Math.floor(1000 + Math.random() * 9000)}`);
+      setCategory(CATEGORIES[0]);
       setDescription("");
       setUnit("pcs");
-      setCostPrice(5000);
-      setSellingPrice(7500);
-      setCurrentStock(15);
-      setMinStockLevel(5);
+      setCostPrice("");
+      setSellingPrice("");
+      setInitialStock("10");
+      setMinStockLevel("5");
       setGodownId(godowns[0]?.id || "");
     }
-  }, [editItem, godowns, isOpen]);
+  }, [editItem, isOpen, godowns]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const cost = parseFloat(costPrice);
+    const selling = parseFloat(sellingPrice);
+    const stock = parseInt(initialStock);
+    const minLevel = parseInt(minStockLevel);
+
+    if (isNaN(cost) || isNaN(selling) || isNaN(stock) || isNaN(minLevel)) {
+      notify("error", "Validation Error", "Please provide valid numbers for pricing and quantities.");
+      return;
+    }
+
+    if (selling < cost) {
+      notify("warning", "Negative Margin Warning", "Retail price is lower than cost price.");
+    }
+
     if (editItem) {
       updateItem({
         ...editItem,
-        sku,
         name,
+        sku,
         category,
         description,
         unit,
-        costPrice,
-        sellingPrice,
-        currentStock,
-        minStockLevel,
+        costPrice: cost,
+        sellingPrice: selling,
+        currentStock: stock,
+        minStockLevel: minLevel,
         godownId,
       });
     } else {
       addItem({
-        sku,
         name,
+        sku,
         category,
         description,
         unit,
-        costPrice,
-        sellingPrice,
-        currentStock,
-        minStockLevel,
+        costPrice: cost,
+        sellingPrice: selling,
+        currentStock: stock,
+        minStockLevel: minLevel,
         godownId,
       });
     }
@@ -88,37 +111,27 @@ export function AddItemModal({ isOpen, onClose, editItem }: AddItemModalProps) {
     onClose();
   };
 
-  const categories = [
-    "Laptops & Desktops",
-    "Processors & GPUs",
-    "Monitors & Displays",
-    "Networking Gear",
-    "Storage",
-    "Peripherals",
-    "Accessories",
-  ];
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="w-full max-w-2xl bg-white border border-[#EAE4E3] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#EAE4E3] bg-[#FAF8F7]">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 rounded-xl">
-              <Package className="w-5 h-5" />
+            <div className="p-2.5 bg-[#FAF4F0] text-[#B85D19] border border-[#F2CBB0] rounded-xl">
+              <Package className="w-5 h-5 text-[#B85D19]" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-[#1C2727]">
                 {editItem ? "Edit Product Details" : "Add New Inventory Item (SKU)"}
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 font-medium">
                 Manage stock thresholds, unit economics and warehouse placement.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-[#EAE4E3]/60 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -128,45 +141,45 @@ export function AddItemModal({ isOpen, onClose, editItem }: AddItemModalProps) {
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                Item Name <span className="text-rose-500">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                Product Name <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Apple MacBook Pro 16&quot;"
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="e.g. Apple MacBook Pro 16 M3"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] focus:border-[#228181] transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                SKU / Serial Code <span className="text-rose-500">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                SKU / Code <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
                 required
                 value={sku}
                 onChange={(e) => setSku(e.target.value)}
-                placeholder="e.g. LAP-MBP-16M3"
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono"
+                placeholder="e.g. LAP-MBP-16"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] focus:border-[#228181] transition-all"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
                 Category
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
               >
-                {categories.map((c) => (
+                {CATEGORIES.map((c) => (
                   <option key={c} value={c}>
                     {c}
                   </option>
@@ -175,127 +188,114 @@ export function AddItemModal({ isOpen, onClose, editItem }: AddItemModalProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                Unit of Measure
-              </label>
-              <input
-                type="text"
-                value={unit}
-                onChange={(e) => setUnit(e.target.value)}
-                placeholder="pcs, boxes, sets"
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                Godown Location
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                Fulfillment Facility / Godown
               </label>
               <select
                 value={godownId}
                 onChange={(e) => setGodownId(e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
               >
                 {godowns.map((g) => (
                   <option key={g.id} value={g.id}>
-                    {g.name}
+                    {g.name} ({g.code})
                   </option>
                 ))}
               </select>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                Purchase / Cost Price (₹) <span className="text-rose-500">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                Cost Price (₹) <span className="text-rose-500">*</span>
               </label>
               <input
                 type="number"
                 min="0"
+                step="any"
                 required
                 value={costPrice}
-                onChange={(e) => setCostPrice(parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                onChange={(e) => setCostPrice(e.target.value)}
+                placeholder="25000"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                Retail / Selling Price (₹) <span className="text-rose-500">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                Retail Price (₹) <span className="text-rose-500">*</span>
               </label>
               <input
                 type="number"
                 min="0"
+                step="any"
                 required
                 value={sellingPrice}
-                onChange={(e) => setSellingPrice(parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                onChange={(e) => setSellingPrice(e.target.value)}
+                placeholder="32000"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
               />
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                Current On-Hand Quantity <span className="text-rose-500">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                Initial Stock <span className="text-rose-500">*</span>
               </label>
               <input
                 type="number"
                 min="0"
                 required
-                value={currentStock}
-                onChange={(e) => setCurrentStock(parseInt(e.target.value) || 0)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                value={initialStock}
+                onChange={(e) => setInitialStock(e.target.value)}
+                placeholder="10"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                Minimum Stock Alert Level <span className="text-rose-500">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+                Min Threshold <span className="text-rose-500">*</span>
               </label>
               <input
                 type="number"
-                min="1"
+                min="0"
                 required
                 value={minStockLevel}
-                onChange={(e) => setMinStockLevel(parseInt(e.target.value) || 1)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                onChange={(e) => setMinStockLevel(e.target.value)}
+                placeholder="5"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
               />
-              <p className="text-[11px] text-slate-400 mt-1">
-                Triggers Low Stock warning when inventory drops to or below this amount.
-              </p>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-              Specifications & Description
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+              Description / Specifications
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Key specifications, warranty info, packaging details..."
+              placeholder="e.g. 16-inch Liquid Retina XDR, Apple M3 Max, 36GB Unified Memory"
               rows={2}
-              className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] resize-none transition-all"
             />
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-zinc-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#EAE4E3]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl"
+              className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-[#1C2727] hover:bg-[#FAF8F7] active:scale-95 rounded-xl border border-[#DDD6D5] transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-[#228181] hover:bg-[#1A6868] active:scale-95 rounded-xl shadow-xs hover:shadow-md transition-all"
             >
               <Check className="w-4 h-4" />
-              {editItem ? "Save Changes" : "Save Item to Inventory"}
+              <span>{editItem ? "Save Changes" : "Create SKU"}</span>
             </button>
           </div>
         </form>

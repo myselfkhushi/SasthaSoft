@@ -148,9 +148,9 @@ export function Sidebar({
               <button
                 key={item.id}
                 onClick={() => handleSelect(item.id === "suppliers" ? "contacts" : item.id)}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
                   isActive
-                    ? "bg-[#228181] text-white shadow-md shadow-[#0B2525]/30 border border-white/20 backdrop-blur-md font-semibold"
+                    ? "bg-[#228181] text-white shadow-md shadow-[#0B2525]/30 border border-white/20 backdrop-blur-md font-bold"
                     : "text-[#C0DBDB]/80 hover:bg-white/10 hover:text-white"
                 }`}
               >

@@ -50,32 +50,11 @@ export default function Home() {
 
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
-  // Synchronize dark mode class to html element
+  // Strictly enforce bespoke light theme across all sessions
   useEffect(() => {
-    const savedTheme = localStorage.getItem("sastha_theme") as "light" | "dark" | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      if (savedTheme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    } else {
-      // Default to bespoke warm cream light theme
-      document.documentElement.classList.remove("dark");
-    }
+    localStorage.removeItem("sastha_theme");
+    document.documentElement.classList.remove("dark");
   }, []);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    localStorage.setItem("sastha_theme", nextTheme);
-    if (nextTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
 
   // Keyboard shortcut Ctrl/Cmd + K
   useEffect(() => {
@@ -112,15 +91,15 @@ export default function Home() {
 
   if (!isLoaded) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-200">
+      <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-[#F8F6F5] text-[#1C2727]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg animate-bounce">
+          <div className="w-10 h-10 rounded-xl bg-[#228181] flex items-center justify-center text-white shadow-lg animate-bounce">
             <Boxes className="w-6 h-6" />
           </div>
           <div>
-            <div className="font-bold text-lg">SasthaSoft InventoCore</div>
-            <div className="text-xs text-slate-400 flex items-center gap-1.5">
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-500" />
+            <div className="font-bold text-lg text-[#1C2727]">SasthaSoft InventoCore</div>
+            <div className="text-xs text-slate-500 flex items-center gap-1.5 font-medium">
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-[#228181]" />
               Initializing connected inventory state...
             </div>
           </div>
@@ -137,8 +116,8 @@ export default function Home() {
         setActiveTab={setActiveTab}
         isMobileOpen={isMobileMenuOpen}
         setIsMobileOpen={setIsMobileMenuOpen}
-        theme={theme}
-        toggleTheme={toggleTheme}
+        theme="light"
+        toggleTheme={() => {}}
       />
 
       {/* Main Content Area */}

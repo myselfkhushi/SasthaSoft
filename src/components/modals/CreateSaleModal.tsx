@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useInventory } from "@/context/InventoryContext";
-import { X, Plus, Trash2, AlertCircle, ShoppingCart, Check } from "lucide-react";
+import { X, Plus, Trash2, ShoppingCart, Check, AlertCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
 interface CreateSaleModalProps {
@@ -21,13 +21,15 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
 
   const [customerId, setCustomerId] = useState(customers[0]?.id || "");
   const [godownId, setGodownId] = useState(godowns[0]?.id || "");
+  const [discount, setDiscount] = useState(0);
   const [notes, setNotes] = useState("");
-  const [discount, setDiscount] = useState<number>(0);
+
+  const inStockItems = items.filter((i) => i.currentStock > 0);
   const [lineItems, setLineItems] = useState<SaleLineItemInput[]>([
     {
-      itemId: items[0]?.id || "",
+      itemId: inStockItems[0]?.id || items[0]?.id || "",
       quantity: 1,
-      unitPrice: items[0]?.sellingPrice || 0,
+      unitPrice: inStockItems[0]?.sellingPrice || items[0]?.sellingPrice || 0,
     },
   ]);
 
@@ -53,31 +55,21 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
     setLineItems(updated);
   };
 
-  const handlePriceChange = (index: number, unitPrice: number) => {
-    const updated = [...lineItems];
-    updated[index] = {
-      ...updated[index],
-      unitPrice: Math.max(0, unitPrice),
-    };
-    setLineItems(updated);
-  };
-
   const addLine = () => {
-    const firstAvailable = items.find(
-      (i) => !lineItems.some((li) => li.itemId === i.id) && i.currentStock > 0
-    ) || items[0];
-
-    if (!firstAvailable) {
-      notify("warning", "No items left", "All inventory items have already been added.");
+    const available = items.find(
+      (i) => i.currentStock > 0 && !lineItems.some((li) => li.itemId === i.id)
+    );
+    if (!available) {
+      notify("warning", "No More Available Items", "All in-stock products are already selected.");
       return;
     }
 
     setLineItems([
       ...lineItems,
       {
-        itemId: firstAvailable.id,
+        itemId: available.id,
         quantity: 1,
-        unitPrice: firstAvailable.sellingPrice,
+        unitPrice: available.sellingPrice,
       },
     ]);
   };
@@ -88,29 +80,26 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
   };
 
   // Calculations
-  const subtotal = lineItems.reduce((acc, line) => {
-    return acc + line.quantity * line.unitPrice;
-  }, 0);
-
+  const subtotal = lineItems.reduce((acc, l) => acc + l.quantity * l.unitPrice, 0);
   const taxAmount = Math.round(subtotal * 0.18); // 18% standard GST
   const totalAmount = Math.max(0, subtotal + taxAmount - discount);
 
-  // Check validation issues
-  let validationError: string | null = null;
-  for (const line of lineItems) {
-    const item = items.find((i) => i.id === line.itemId);
-    if (!item) {
-      validationError = "Please select a valid product.";
-      break;
+  // Validate stock
+  const validateStock = () => {
+    for (const line of lineItems) {
+      const item = items.find((i) => i.id === line.itemId);
+      if (!item) return "Product not found";
+      if (item.currentStock < line.quantity) {
+        return `Insufficient stock for ${item.name}. Available: ${item.currentStock}, Requested: ${line.quantity}`;
+      }
     }
-    if (item.currentStock < line.quantity) {
-      validationError = `Insufficient stock for "${item.name}". Only ${item.currentStock} units available, requested: ${line.quantity}.`;
-      break;
-    }
-  }
+    return null;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const validationError = validateStock();
     if (validationError) {
       notify("error", "Stock Validation Failed", validationError);
       return;
@@ -118,7 +107,7 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
 
     const selectedCustomer = customers.find((c) => c.id === customerId);
     if (!selectedCustomer) {
-      notify("error", "Invalid Customer", "Please select a customer.");
+      notify("error", "Invalid Customer", "Please select a valid customer.");
       return;
     }
 
@@ -156,26 +145,26 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="w-full max-w-3xl bg-white border border-[#EAE4E3] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#EAE4E3] bg-[#FAF8F7]">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-[#EAF4F4] text-[#228181] rounded-xl">
-              <ShoppingCart className="w-5 h-5" />
+            <div className="p-2.5 bg-[#EAF4F4] text-[#165353] border border-[#228181]/20 rounded-xl">
+              <ShoppingCart className="w-5 h-5 text-[#228181]" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-[#1C2727]">
                 New Sales Order / Invoice
               </h3>
-              <p className="text-xs text-slate-500">
-                Connected workflow: Placing a sale will immediately reduce available stock & log history.
+              <p className="text-xs text-slate-500 font-medium">
+                Connected workflow: Placing a sale will immediately reduce available stock &amp; log history.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-[#EAE4E3]/60 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -186,13 +175,13 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
           {/* Customer & Warehouse Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
                 Client / Customer <span className="text-rose-500">*</span>
               </label>
               <select
                 value={customerId}
                 onChange={(e) => setCustomerId(e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] focus:border-[#228181] transition-all"
                 required
               >
                 {customers.map((c) => (
@@ -204,13 +193,13 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
                 Fulfillment Godown / Warehouse <span className="text-rose-500">*</span>
               </label>
               <select
                 value={godownId}
                 onChange={(e) => setGodownId(e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] focus:border-[#228181] transition-all"
                 required
               >
                 {godowns.map((g) => (
@@ -225,20 +214,20 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
           {/* Line Items Table */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Line Items & Inventory Deduction
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                Line Items &amp; Inventory Deduction
               </label>
               <button
                 type="button"
                 onClick={addLine}
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#228181] hover:text-[#165353] active:scale-95 transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
-                Add Item
+                <span>Add Item</span>
               </button>
             </div>
 
-            <div className="border border-slate-200 dark:border-zinc-800 rounded-xl overflow-hidden divide-y divide-slate-200 dark:divide-zinc-800">
+            <div className="border border-[#EAE4E3] rounded-xl overflow-hidden divide-y divide-[#EAE4E3]">
               {lineItems.map((line, index) => {
                 const currentItem = items.find((i) => i.id === line.itemId);
                 const isOutOfStock = currentItem ? currentItem.currentStock < line.quantity : false;
@@ -246,8 +235,8 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
                 return (
                   <div
                     key={index}
-                    className={`p-3.5 flex flex-col sm:flex-row items-start sm:items-center gap-3 ${
-                      isOutOfStock ? "bg-rose-50/50 dark:bg-rose-950/20" : "bg-white dark:bg-zinc-900"
+                    className={`p-3.5 flex flex-col sm:flex-row items-start sm:items-center gap-3 transition-colors ${
+                      isOutOfStock ? "bg-rose-50/50" : "bg-white hover:bg-[#FAF8F7]"
                     }`}
                   >
                     {/* Item Select */}
@@ -255,70 +244,71 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
                       <select
                         value={line.itemId}
                         onChange={(e) => handleItemChange(index, e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs sm:text-sm rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181]"
                       >
                         {items.map((i) => (
-                          <option key={i.id} value={i.id}>
-                            {i.name} ({i.sku}) - {i.currentStock} in stock
+                          <option key={i.id} value={i.id} disabled={i.currentStock === 0}>
+                            {i.name} ({i.sku}) {i.currentStock === 0 ? "- Out of Stock" : ""}
                           </option>
                         ))}
                       </select>
                       {currentItem && (
                         <div className="flex items-center gap-2 mt-1 text-[11px]">
                           <span
-                            className={`font-medium ${
-                              isOutOfStock
-                                ? "text-rose-600 dark:text-rose-400"
-                                : "text-emerald-600 dark:text-emerald-400"
+                            className={`font-semibold ${
+                              isOutOfStock ? "text-rose-600 font-bold" : "text-[#165353]"
                             }`}
                           >
                             Live Stock: {currentItem.currentStock} {currentItem.unit}
                           </span>
                           <span className="text-slate-400">•</span>
-                          <span className="text-slate-500">Min Threshold: {currentItem.minStockLevel}</span>
+                          <span className="text-slate-500 font-medium">
+                            Min Threshold: {currentItem.minStockLevel}
+                          </span>
                         </div>
                       )}
                     </div>
 
                     {/* Quantity */}
-                    <div className="w-24 shrink-0">
-                      <label className="text-[10px] text-slate-400 block sm:hidden">Qty</label>
+                    <div className="w-24">
                       <input
                         type="number"
                         min="1"
+                        max={currentItem ? currentItem.currentStock : 999}
                         value={line.quantity}
                         onChange={(e) => handleQtyChange(index, parseInt(e.target.value) || 1)}
-                        className={`w-full px-2.5 py-1.5 text-xs sm:text-sm rounded-lg border text-center ${
+                        className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border bg-[#FAF8F7] text-[#1C2727] font-mono text-center focus:bg-white focus:outline-none focus:ring-2 ${
                           isOutOfStock
-                            ? "border-rose-400 bg-rose-50 text-rose-700 font-bold"
-                            : "border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100"
-                        } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                            ? "border-rose-400 focus:ring-rose-500"
+                            : "border-[#EAE4E3] focus:ring-[#228181]"
+                        }`}
+                        placeholder="Qty"
                       />
                     </div>
 
                     {/* Unit Price */}
-                    <div className="w-32 shrink-0">
-                      <label className="text-[10px] text-slate-400 block sm:hidden">Unit Price</label>
+                    <div className="w-32">
                       <input
                         type="number"
                         min="0"
                         value={line.unitPrice}
-                        onChange={(e) => handlePriceChange(index, parseFloat(e.target.value) || 0)}
-                        className="w-full px-2.5 py-1.5 text-xs sm:text-sm rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 text-right focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        readOnly
+                        className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-slate-600 font-mono text-right cursor-not-allowed"
+                        placeholder="Price"
                       />
                     </div>
 
                     {/* Line Total */}
-                    <div className="w-28 text-right font-medium text-xs sm:text-sm text-slate-900 dark:text-zinc-100 shrink-0">
+                    <div className="w-28 text-right font-black text-[#1C2727] text-xs sm:text-sm font-mono">
                       {formatCurrency(line.quantity * line.unitPrice)}
                     </div>
 
-                    {/* Remove Action */}
+                    {/* Delete Line */}
                     <button
                       type="button"
                       onClick={() => removeLine(index)}
                       disabled={lineItems.length === 1}
-                      className="p-1.5 text-slate-400 hover:text-rose-500 disabled:opacity-30 disabled:hover:text-slate-400"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 disabled:opacity-30 disabled:pointer-events-none active:scale-90 transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -328,18 +318,10 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
             </div>
           </div>
 
-          {/* Validation Warning Alert if any */}
-          {validationError && (
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{validationError}</span>
-            </div>
-          )}
-
-          {/* Order Summary & Pricing Breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-slate-200 dark:border-zinc-800">
+          {/* Notes & Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
                 Internal Order Notes
               </label>
               <textarea
@@ -347,52 +329,54 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Shipping instructions, client purchase PO reference, delivery requirements..."
                 rows={3}
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                className="w-full px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] resize-none transition-all"
               />
             </div>
 
-            <div className="bg-slate-50 dark:bg-zinc-950/60 p-4 rounded-xl border border-slate-200 dark:border-zinc-800 space-y-2 text-xs sm:text-sm">
-              <div className="flex justify-between text-slate-600 dark:text-zinc-400">
+            {/* Calculations Card */}
+            <div className="p-4 rounded-xl bg-[#FAF8F7] border border-[#EAE4E3] space-y-2 text-xs font-medium text-slate-600">
+              <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>{formatCurrency(subtotal)}</span>
+                <span className="font-bold font-mono text-[#1C2727]">{formatCurrency(subtotal)}</span>
               </div>
-              <div className="flex justify-between text-slate-600 dark:text-zinc-400">
+              <div className="flex justify-between">
                 <span>GST Tax (18% Standard)</span>
-                <span>{formatCurrency(taxAmount)}</span>
+                <span className="font-bold font-mono text-[#1C2727]">{formatCurrency(taxAmount)}</span>
               </div>
-              <div className="flex items-center justify-between text-slate-600 dark:text-zinc-400">
+              <div className="flex justify-between items-center">
                 <span>Discount (₹)</span>
                 <input
                   type="number"
                   min="0"
                   value={discount}
-                  onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
-                  className="w-24 px-2 py-1 text-right text-xs rounded border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100"
+                  onChange={(e) => setDiscount(Math.max(0, parseFloat(e.target.value) || 0))}
+                  className="w-24 px-2 py-1 text-right text-xs rounded-lg border border-[#EAE4E3] bg-white text-[#1C2727] font-mono focus:ring-1 focus:ring-[#228181]"
                 />
               </div>
-              <div className="pt-2 border-t border-slate-200 dark:border-zinc-800 flex justify-between font-bold text-base text-slate-900 dark:text-zinc-100">
-                <span>Total Invoice Amount</span>
-                <span className="text-indigo-600 dark:text-indigo-400">{formatCurrency(totalAmount)}</span>
+              <div className="pt-2 border-t border-[#EAE4E3] flex justify-between items-center">
+                <span className="text-sm font-bold text-[#1C2727]">Total Invoice Amount</span>
+                <span className="text-lg font-black text-[#165353] font-mono">
+                  {formatCurrency(totalAmount)}
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-zinc-800">
+          {/* Footer Actions */}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#EAE4E3]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
+              className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-[#1C2727] hover:bg-[#FAF8F7] active:scale-95 rounded-xl border border-[#DDD6D5] transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={Boolean(validationError)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-xs transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-[#228181] hover:bg-[#1A6868] active:scale-95 rounded-xl shadow-xs hover:shadow-md transition-all"
             >
               <Check className="w-4 h-4" />
-              Generate Invoice & Deduct Stock
+              <span>Generate Invoice &amp; Deduct Stock</span>
             </button>
           </div>
         </form>

@@ -51,26 +51,26 @@ export function TransferStockModal({ isOpen, onClose }: TransferStockModalProps)
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="w-full max-w-lg bg-white border border-[#EAE4E3] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#EAE4E3] bg-[#FAF8F7]">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 rounded-xl">
-              <ArrowRightLeft className="w-5 h-5" />
+            <div className="p-2.5 bg-[#EAF4F4] text-[#165353] border border-[#228181]/20 rounded-xl">
+              <ArrowRightLeft className="w-5 h-5 text-[#228181]" />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-slate-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-[#1C2727]">
                 Inter-Godown Stock Transfer
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 font-medium">
                 Shift physical inventory between regional logistics hubs.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-[#EAE4E3]/60 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -79,13 +79,13 @@ export function TransferStockModal({ isOpen, onClose }: TransferStockModalProps)
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
               Select Item to Transfer
             </label>
             <select
               value={itemId}
               onChange={(e) => setItemId(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
             >
               {items.map((i) => (
                 <option key={i.id} value={i.id}>
@@ -97,13 +97,13 @@ export function TransferStockModal({ isOpen, onClose }: TransferStockModalProps)
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                From Origin Godown
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                From Source Godown
               </label>
               <select
                 value={fromGodownId}
                 onChange={(e) => setFromGodownId(e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
               >
                 {godowns.map((g) => (
                   <option key={g.id} value={g.id}>
@@ -114,73 +114,72 @@ export function TransferStockModal({ isOpen, onClose }: TransferStockModalProps)
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                To Destination Godown
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                To Target Godown
               </label>
               <select
                 value={toGodownId}
                 onChange={(e) => setToGodownId(e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
               >
                 {godowns.map((g) => (
-                  <option key={g.id} value={g.id}>
-                    {g.name}
+                  <option key={g.id} value={g.id} disabled={g.id === fromGodownId}>
+                    {g.name} {g.id === fromGodownId ? "(Source)" : ""}
                   </option>
                 ))}
               </select>
             </div>
           </div>
 
-          {fromGodownId === toGodownId && (
-            <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 dark:bg-amber-950/40 p-2.5 rounded-lg border border-amber-200 dark:border-amber-900">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>Source and destination must be distinct warehouses.</span>
-            </div>
-          )}
-
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-              Quantity to Transfer
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              Transfer Quantity ({currentItem?.unit || "units"})
             </label>
             <input
               type="number"
               min="1"
+              max={currentItem?.currentStock || 999}
               required
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
             />
+            {currentItem && (
+              <p className="text-[11px] text-slate-500 font-medium mt-1">
+                Source live inventory available:{" "}
+                <span className="font-bold text-[#165353]">{currentItem.currentStock} {currentItem.unit}</span>
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-              Transfer Manifest Notes
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              Transfer Memo / Reason
             </label>
             <input
               type="text"
+              required
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Driver name, vehicle number, dispatch memo..."
-              className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="e.g. Fulfill south region sales spike"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#EAE4E3] bg-[#FAF8F7] text-[#1C2727] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#228181] transition-all"
             />
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200 dark:border-zinc-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#EAE4E3]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl"
+              className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-[#1C2727] hover:bg-[#FAF8F7] active:scale-95 rounded-xl border border-[#DDD6D5] transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={fromGodownId === toGodownId}
-              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-xs transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-[#228181] hover:bg-[#1A6868] active:scale-95 rounded-xl shadow-xs hover:shadow-md transition-all"
             >
               <Check className="w-4 h-4" />
-              Authorize Transfer
+              <span>Execute Transfer</span>
             </button>
           </div>
         </form>
