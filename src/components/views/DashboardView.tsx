@@ -38,6 +38,14 @@ export function DashboardView({
     0
   );
 
+  const formattedTotalSalesCompact = totalSales >= 10000000
+    ? `₹${(totalSales / 10000000).toFixed(2)}Cr`
+    : totalSales >= 100000
+    ? `₹${(totalSales / 100000).toFixed(1)}L`
+    : totalSales >= 1000
+    ? `₹${(totalSales / 1000).toFixed(1)}k`
+    : `₹${totalSales}`;
+
   const lowStockItems = items.filter(
     (i) => i.status === "low_stock" || i.status === "out_of_stock"
   );
@@ -504,7 +512,7 @@ export function DashboardView({
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="px-3 py-1.5 rounded-lg bg-white shadow-md border border-[#EAE4E3] text-center">
                   <div className="text-sm font-black text-[#1C2727] font-mono">
-                    ₹18.4L
+                    {formattedTotalSalesCompact}
                   </div>
                   <div className="text-[9px] text-slate-400 font-semibold uppercase">
                     Total
