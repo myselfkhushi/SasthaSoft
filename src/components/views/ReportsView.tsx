@@ -149,13 +149,13 @@ export function ReportsView() {
     <div className="space-y-6">
       {/* Tab Switcher & Export Button */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-zinc-800 pb-4">
-        <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-zinc-900 rounded-xl">
+        <div className="flex items-center gap-2 p-1 bg-[#F0ECEB] rounded-xl">
           <button
             onClick={() => setActiveReportTab("stock")}
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
               activeReportTab === "stock"
-                ? "bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                ? "bg-white text-[#1C2727] shadow-xs"
+                : "text-slate-500 hover:text-[#1C2727]"
             }`}
           >
             <Package className="w-4 h-4" />
@@ -166,8 +166,8 @@ export function ReportsView() {
             onClick={() => setActiveReportTab("sales")}
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
               activeReportTab === "sales"
-                ? "bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                ? "bg-white text-[#1C2727] shadow-xs"
+                : "text-slate-500 hover:text-[#1C2727]"
             }`}
           >
             <TrendingUp className="w-4 h-4" />
@@ -178,8 +178,8 @@ export function ReportsView() {
             onClick={() => setActiveReportTab("purchase")}
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
               activeReportTab === "purchase"
-                ? "bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                ? "bg-white text-[#1C2727] shadow-xs"
+                : "text-slate-500 hover:text-[#1C2727]"
             }`}
           >
             <Truck className="w-4 h-4" />
@@ -189,9 +189,9 @@ export function ReportsView() {
 
         <button
           onClick={handleExportCurrentReport}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-700 shadow-sm transition-all"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-[#228181] hover:bg-[#1A6868] text-white shadow-xs transition-all"
         >
-          <Download className="w-4 h-4 text-indigo-500" />
+          <Download className="w-4 h-4 text-white" />
           <span>Export {activeReportTab.toUpperCase()} to CSV</span>
         </button>
       </div>
@@ -201,28 +201,28 @@ export function ReportsView() {
         <div className="space-y-6">
           {/* Top Valuation Metrics */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+              <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Asset Cost Valuation
               </div>
-              <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-zinc-100 mt-1">
+              <div className="text-2xl font-bold tracking-tight text-slate-800 dark:text-zinc-100 mt-1">
                 {formatCurrency(totalCostValuation)}
               </div>
               <div className="text-xs text-slate-400 mt-0.5">Capital invested in physical stock</div>
             </div>
 
-            <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+              <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Potential Retail Value
               </div>
-              <div className="text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400 mt-1">
+              <div className="text-2xl font-bold tracking-tight text-[#F59E0B] mt-1">
                 {formatCurrency(totalRetailValuation)}
               </div>
               <div className="text-xs text-slate-400 mt-0.5">Projected revenue upon 100% liquidation</div>
             </div>
 
-            <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+              <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Projected Gross Profit
               </div>
               <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 mt-1">
@@ -233,11 +233,11 @@ export function ReportsView() {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+              <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Active Catalog Units
               </div>
-              <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-zinc-100 mt-1">
+              <div className="text-2xl font-bold tracking-tight text-slate-800 dark:text-zinc-100 mt-1">
                 {items.reduce((a, b) => a + b.currentStock, 0)} units
               </div>
               <div className="text-xs text-slate-400 mt-0.5">Spread across {categoryList.length} categories</div>
@@ -245,16 +245,16 @@ export function ReportsView() {
           </div>
 
           {/* Category Health & Breakdown Table */}
-          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xs">
-            <div className="p-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/75 dark:bg-zinc-950/50">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
+          <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
+            <div className="p-4 border-b border-[#EAE4E3] bg-[#FAF8F7]">
+              <h3 className="text-sm font-bold text-[#1C2727]">
                 Inventory Valuation Breakdown by Product Category
               </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 dark:border-zinc-800 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <tr className="border-b border-[#EAE4E3] text-[11px] font-bold uppercase tracking-wider text-slate-400">
                     <th className="py-3 px-4">Category Name</th>
                     <th className="py-3 px-4 text-center">SKU Count</th>
                     <th className="py-3 px-4 text-center">Total Units</th>
@@ -349,16 +349,16 @@ export function ReportsView() {
           </div>
 
           {/* Top Selling Products Table */}
-          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xs">
-            <div className="p-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/75 dark:bg-zinc-950/50">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
+          <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
+            <div className="p-4 border-b border-[#EAE4E3] bg-[#FAF8F7]">
+              <h3 className="text-sm font-bold text-[#1C2727]">
                 Top Selling Products Ranked by Sales Volume
               </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 dark:border-zinc-800 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <tr className="border-b border-[#EAE4E3] text-[11px] font-bold uppercase tracking-wider text-slate-400">
                     <th className="py-3 px-4">Product Name &amp; SKU</th>
                     <th className="py-3 px-4 text-center">Units Sold</th>
                     <th className="py-3 px-4 text-right">Revenue Generated</th>
@@ -428,16 +428,16 @@ export function ReportsView() {
           </div>
 
           {/* Supplier Spend Table */}
-          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xs">
-            <div className="p-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/75 dark:bg-zinc-950/50">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
+          <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
+            <div className="p-4 border-b border-[#EAE4E3] bg-[#FAF8F7]">
+              <h3 className="text-sm font-bold text-[#1C2727]">
                 Procurement Spend Breakdown by Vendor
               </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 dark:border-zinc-800 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <tr className="border-b border-[#EAE4E3] text-[11px] font-bold uppercase tracking-wider text-slate-400">
                     <th className="py-3 px-4">Supplier Company</th>
                     <th className="py-3 px-4">Primary Contact</th>
                     <th className="py-3 px-4 text-center">Purchase Orders</th>

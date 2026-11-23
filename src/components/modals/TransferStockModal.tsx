@@ -177,7 +177,7 @@ export function TransferStockModal({ isOpen, onClose }: TransferStockModalProps)
             <button
               type="submit"
               disabled={fromGodownId === toGodownId}
-              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-lg shadow-purple-600/25 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-xs transition-all"
             >
               <Check className="w-4 h-4" />
               Authorize Transfer

@@ -147,7 +147,7 @@ export function AdjustStockModal({ isOpen, onClose, item }: AdjustStockModalProp
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg shadow-blue-600/25 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all"
             >
               <Check className="w-4 h-4" />
               Confirm Adjustment

@@ -53,18 +53,18 @@ export function SalesView({ onOpenCreateSale, onSelectOrder }: SalesViewProps) {
     <div className="space-y-6">
       {/* Top Header Metrics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Total Sales Invoiced
           </div>
-          <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-zinc-100 mt-1">
+          <div className="text-2xl font-bold tracking-tight text-slate-800 dark:text-zinc-100 mt-1">
             {formatCurrency(totalRevenue)}
           </div>
           <div className="text-xs text-slate-400 mt-0.5">{salesOrders.length} total orders recorded</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Paid Invoices
           </div>
           <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 mt-1">
@@ -73,8 +73,8 @@ export function SalesView({ onOpenCreateSale, onSelectOrder }: SalesViewProps) {
           <div className="text-xs text-slate-400 mt-0.5">High cash-flow collection rate</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Awaiting Fulfillment
           </div>
           <div className="text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400 mt-1">
@@ -127,7 +127,7 @@ export function SalesView({ onOpenCreateSale, onSelectOrder }: SalesViewProps) {
           {/* New Sale Button */}
           <button
             onClick={onOpenCreateSale}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md shadow-indigo-600/20 transition-all shrink-0"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all shrink-0"
           >
             <Plus className="w-4 h-4" />
             New Sales Order
@@ -136,11 +136,11 @@ export function SalesView({ onOpenCreateSale, onSelectOrder }: SalesViewProps) {
       </div>
 
       {/* Sales Orders Table */}
-      <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xs">
+      <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-zinc-800 bg-slate-50/75 dark:bg-zinc-950/50 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-400">
                 <th className="py-3 px-4">Invoice #</th>
                 <th className="py-3 px-4">Date</th>
                 <th className="py-3 px-4">Customer & Company</th>
@@ -250,7 +250,7 @@ export function SalesView({ onOpenCreateSale, onSelectOrder }: SalesViewProps) {
                       <td className="py-3 px-4 text-right">
                         <button
                           onClick={() => onSelectOrder(order)}
-                          className="px-2.5 py-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 rounded-lg transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold text-[#228181] bg-[#EAF4F4] hover:bg-[#D5EAEA] rounded-lg transition-colors"
                         >
                           View Invoice
                         </button>

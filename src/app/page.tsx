@@ -29,8 +29,8 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Theme state
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  // Theme state - default to warm light theme as per reference design
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   // Modals state
   const [isCreateSaleOpen, setIsCreateSaleOpen] = useState(false);
@@ -61,8 +61,8 @@ export default function Home() {
         document.documentElement.classList.remove("dark");
       }
     } else {
-      // Default to dark for premium modern feel
-      document.documentElement.classList.add("dark");
+      // Default to bespoke warm cream light theme
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
@@ -130,7 +130,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-zinc-100">
+    <div className="min-h-screen flex bg-[#F8F6F5] text-[#1C2727] transition-colors">
       {/* Sidebar Navigation */}
       <Sidebar
         activeTab={activeTab}

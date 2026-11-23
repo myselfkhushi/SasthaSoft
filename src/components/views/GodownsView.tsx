@@ -36,7 +36,7 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
 
         <button
           onClick={onOpenTransfer}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-xl shadow-md shadow-purple-600/20 transition-all shrink-0"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all shrink-0"
         >
           <ArrowRightLeft className="w-4 h-4" />
           Transfer Stock Between Godowns
@@ -60,7 +60,7 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
           return (
             <div
               key={godown.id}
-              className="p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800 shadow-sm flex flex-col justify-between gap-4"
+              className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(34,129,129,0.03)] flex flex-col justify-between gap-4"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -124,11 +124,11 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
       </div>
 
       {/* Inter-Godown Transfers Log Table */}
-      <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xs">
-        <div className="p-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/75 dark:bg-zinc-950/50 flex items-center justify-between">
+      <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
+        <div className="p-4 border-b border-[#EAE4E3] bg-[#FAF8F7] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ArrowRightLeft className="w-4 h-4 text-purple-500" />
-            <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
+            <ArrowRightLeft className="w-4 h-4 text-[#228181]" />
+            <h3 className="text-sm font-bold text-[#1C2727]">
               Inter-Godown Transfer Manifest &amp; Log
             </h3>
           </div>
@@ -138,7 +138,7 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-zinc-800 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <tr className="border-b border-[#EAE4E3] text-[11px] font-bold uppercase tracking-wider text-slate-400">
                 <th className="py-3 px-4">Transfer #</th>
                 <th className="py-3 px-4">Date</th>
                 <th className="py-3 px-4">Product &amp; SKU</th>

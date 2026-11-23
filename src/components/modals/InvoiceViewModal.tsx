@@ -61,7 +61,7 @@ export function InvoiceViewModal({ isOpen, onClose, order }: InvoiceViewModalPro
           <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200 dark:border-zinc-800">
             <div>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-md">
+                <div className="w-8 h-8 rounded-lg bg-[#228181] flex items-center justify-center text-white font-bold text-base shadow-xs">
                   S
                 </div>
                 <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
@@ -182,7 +182,7 @@ export function InvoiceViewModal({ isOpen, onClose, order }: InvoiceViewModalPro
               )}
               <div className="pt-2 border-t border-slate-200 dark:border-zinc-800 flex justify-between font-bold text-base text-slate-900 dark:text-zinc-100">
                 <span>Grand Total</span>
-                <span className="text-indigo-600 dark:text-indigo-400">
+                <span className="text-[#228181] font-black">
                   {formatCurrency(order.totalAmount)}
                 </span>
               </div>

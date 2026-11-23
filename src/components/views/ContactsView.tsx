@@ -61,14 +61,14 @@ export function ContactsView() {
   return (
     <div className="space-y-6">
       {/* Tab Switcher & CTA */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-zinc-800 pb-4">
-        <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-zinc-900 rounded-xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE4E3] pb-4">
+        <div className="flex items-center gap-2 p-1 bg-[#F0ECEB] rounded-xl">
           <button
             onClick={() => setTab("customers")}
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
               tab === "customers"
-                ? "bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                ? "bg-white text-[#1C2727] shadow-xs"
+                : "text-slate-500 hover:text-[#1C2727]"
             }`}
           >
             <Users className="w-4 h-4" />
@@ -79,8 +79,8 @@ export function ContactsView() {
             onClick={() => setTab("suppliers")}
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
               tab === "suppliers"
-                ? "bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                ? "bg-white text-[#1C2727] shadow-xs"
+                : "text-slate-500 hover:text-[#1C2727]"
             }`}
           >
             <Truck className="w-4 h-4" />
@@ -90,7 +90,7 @@ export function ContactsView() {
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md shadow-indigo-600/20 transition-all shrink-0"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all shrink-0"
         >
           <Plus className="w-4 h-4" />
           Add {tab === "customers" ? "Client Company" : "Supplier Vendor"}
@@ -103,7 +103,7 @@ export function ContactsView() {
           customers.map((c) => (
             <div
               key={c.id}
-              className="p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800 shadow-sm flex flex-col justify-between gap-4"
+              className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)] flex flex-col justify-between gap-4"
             >
               <div>
                 <div className="flex items-start justify-between gap-2">
@@ -148,7 +148,7 @@ export function ContactsView() {
           suppliers.map((s) => (
             <div
               key={s.id}
-              className="p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800 shadow-sm flex flex-col justify-between gap-4"
+              className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)] flex flex-col justify-between gap-4"
             >
               <div>
                 <div className="flex items-start justify-between gap-2">

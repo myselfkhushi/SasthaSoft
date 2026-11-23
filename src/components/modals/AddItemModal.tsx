@@ -292,7 +292,7 @@ export function AddItemModal({ isOpen, onClose, editItem }: AddItemModalProps) {
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-amber-600 hover:bg-amber-700 rounded-xl shadow-lg shadow-amber-600/25 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all"
             >
               <Check className="w-4 h-4" />
               {editItem ? "Save Changes" : "Save Item to Inventory"}

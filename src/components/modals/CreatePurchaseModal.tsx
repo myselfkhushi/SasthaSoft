@@ -137,7 +137,7 @@ export function CreatePurchaseModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 rounded-xl">
+            <div className="p-2 bg-[#EAF4F4] text-[#228181] rounded-xl">
               <Truck className="w-5 h-5" />
             </div>
             <div>
@@ -349,7 +349,7 @@ export function CreatePurchaseModal({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-lg shadow-emerald-600/25 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all"
             >
               <Check className="w-4 h-4" />
               Place Purchase Order

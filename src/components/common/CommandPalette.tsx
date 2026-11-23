@@ -92,9 +92,9 @@ export function CommandPalette({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 px-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+      <div className="w-full max-w-xl bg-white border border-[#EAE4E3] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
         {/* Search Input */}
-        <div className="flex items-center px-4 py-3.5 border-b border-slate-200 dark:border-zinc-800">
+        <div className="flex items-center px-4 py-3.5 border-b border-[#EAE4E3]">
           <Search className="w-5 h-5 text-slate-400 mr-3 shrink-0" />
           <input
             type="text"
@@ -102,17 +102,17 @@ export function CommandPalette({
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Type a command, product name, SKU, invoice #, or supplier..."
             autoFocus
-            className="w-full bg-transparent text-sm sm:text-base outline-none text-slate-900 dark:text-zinc-100 placeholder:text-slate-400"
+            className="w-full bg-transparent text-sm sm:text-base outline-none text-[#1C2727] placeholder:text-slate-400"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200"
+              className="p-1 text-slate-400 hover:text-slate-600"
             >
               <X className="w-4 h-4" />
             </button>
           )}
-          <span className="hidden sm:inline-block text-[11px] font-medium text-slate-400 bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded ml-2">
+          <span className="hidden sm:inline-block text-[11px] font-medium text-slate-400 bg-[#F4F0EF] px-2 py-0.5 rounded ml-2">
             ESC
           </span>
         </div>

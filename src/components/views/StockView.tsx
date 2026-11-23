@@ -77,13 +77,13 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
     <div className="space-y-6">
       {/* Top Sub-Tab Switcher */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-zinc-800 pb-4">
-        <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-zinc-900 rounded-xl">
+        <div className="flex items-center gap-2 p-1 bg-[#F0ECEB] rounded-xl">
           <button
             onClick={() => setActiveSubTab("catalog")}
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
               activeSubTab === "catalog"
-                ? "bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                ? "bg-white text-[#1C2727] shadow-xs"
+                : "text-slate-500 hover:text-[#1C2727]"
             }`}
           >
             <Package className="w-4 h-4" />
@@ -94,8 +94,8 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
             onClick={() => setActiveSubTab("history")}
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
               activeSubTab === "history"
-                ? "bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                ? "bg-white text-[#1C2727] shadow-xs"
+                : "text-slate-500 hover:text-[#1C2727]"
             }`}
           >
             <History className="w-4 h-4" />
@@ -106,7 +106,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
         {activeSubTab === "catalog" && (
           <button
             onClick={() => onOpenAddItem()}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md shadow-indigo-600/20 transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all"
           >
             <Plus className="w-4 h-4" />
             Add New Product (SKU)
@@ -127,7 +127,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by SKU, product name, or category..."
-                className="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-xl border border-[#ece8df] dark:border-[#2a253f] bg-white dark:bg-[#1c182b] text-slate-800 dark:text-zinc-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -136,7 +136,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3 py-2 text-xs rounded-xl border border-[#ece8df] dark:border-[#2a253f] bg-white dark:bg-[#1c182b] text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Categories</option>
                 {categories.map((c) => (
@@ -149,7 +149,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3 py-2 text-xs rounded-xl border border-[#ece8df] dark:border-[#2a253f] bg-white dark:bg-[#1c182b] text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Stock Statuses</option>
                 <option value="in_stock">In Stock</option>
@@ -160,7 +160,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
               <select
                 value={godownFilter}
                 onChange={(e) => setGodownFilter(e.target.value)}
-                className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3 py-2 text-xs rounded-xl border border-[#ece8df] dark:border-[#2a253f] bg-white dark:bg-[#1c182b] text-slate-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Godowns</option>
                 {godowns.map((g) => (
@@ -173,11 +173,11 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
           </div>
 
           {/* Catalog Table */}
-          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xs">
+          <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 dark:border-zinc-800 bg-slate-50/75 dark:bg-zinc-950/50 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-400">
                     <th className="py-3 px-4">SKU / Item</th>
                     <th className="py-3 px-4">Category</th>
                     <th className="py-3 px-4">Godown Location</th>
@@ -347,11 +347,11 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
           </div>
 
           {/* Audit Ledger Table */}
-          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xs">
+          <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 dark:border-zinc-800 bg-slate-50/75 dark:bg-zinc-950/50 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-400">
                     <th className="py-3 px-4">Timestamp</th>
                     <th className="py-3 px-4">Item & SKU</th>
                     <th className="py-3 px-4">Change Event</th>

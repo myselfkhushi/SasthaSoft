@@ -47,18 +47,18 @@ export function PurchaseView({ onOpenCreatePO }: PurchaseViewProps) {
     <div className="space-y-6">
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Total Procurement Spend
           </div>
-          <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-zinc-100 mt-1">
+          <div className="text-2xl font-bold tracking-tight text-slate-800 dark:text-zinc-100 mt-1">
             {formatCurrency(totalSpend)}
           </div>
           <div className="text-xs text-slate-400 mt-0.5">{purchaseOrders.length} total purchase orders</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Stock Received
           </div>
           <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 mt-1">
@@ -67,8 +67,8 @@ export function PurchaseView({ onOpenCreatePO }: PurchaseViewProps) {
           <div className="text-xs text-slate-400 mt-0.5">Physical items added to stock ledger</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="p-5 rounded-2xl bg-white dark:bg-[#1c182b] border border-[#ece8df] dark:border-[#2a253f] shadow-[0_4px_20px_rgba(34,27,48,0.03)]">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Pending Delivery
           </div>
           <div className="text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400 mt-1">
@@ -79,8 +79,8 @@ export function PurchaseView({ onOpenCreatePO }: PurchaseViewProps) {
       </div>
 
       {/* Connected Workflow Banner */}
-      <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 flex items-start gap-3">
-        <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 shrink-0">
+      <div className="p-4 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 flex items-start gap-3 shadow-xs">
+        <div className="p-2 rounded-xl bg-emerald-500 text-white shrink-0 shadow-xs">
           <PackageCheck className="w-5 h-5" />
         </div>
         <div>
@@ -122,7 +122,7 @@ export function PurchaseView({ onOpenCreatePO }: PurchaseViewProps) {
 
           <button
             onClick={onOpenCreatePO}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md shadow-emerald-600/20 transition-all shrink-0"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-xs transition-all shrink-0"
           >
             <Plus className="w-4 h-4" />
             New Purchase Order
@@ -131,11 +131,11 @@ export function PurchaseView({ onOpenCreatePO }: PurchaseViewProps) {
       </div>
 
       {/* Purchase Orders Table */}
-      <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xs">
+      <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-zinc-800 bg-slate-50/75 dark:bg-zinc-950/50 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-400">
                 <th className="py-3 px-4">PO #</th>
                 <th className="py-3 px-4">Date Placed</th>
                 <th className="py-3 px-4">Supplier & Vendor</th>
@@ -237,7 +237,7 @@ export function PurchaseView({ onOpenCreatePO }: PurchaseViewProps) {
                         ) : (
                           <button
                             onClick={() => receivePurchaseOrder(po.id)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-all"
+                            className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-lg shadow-xs transition-all"
                           >
                             <PackageCheck className="w-3.5 h-3.5" />
                             Receive &amp; Restock

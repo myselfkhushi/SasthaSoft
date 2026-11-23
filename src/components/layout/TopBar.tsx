@@ -4,11 +4,10 @@ import React from "react";
 import {
   Menu,
   Search,
-  Plus,
+  Mail,
+  Bell,
   ShoppingCart,
   Truck,
-  PackagePlus,
-  Sparkles,
 } from "lucide-react";
 
 interface TopBarProps {
@@ -20,111 +19,113 @@ interface TopBarProps {
   onOpenAddItem: () => void;
 }
 
-const TAB_TITLES: Record<string, { title: string; subtitle: string }> = {
-  dashboard: {
-    title: "Executive Dashboard",
-    subtitle: "Real-time stock valuation, low stock triggers and order activity",
-  },
-  sales: {
-    title: "Sales Orders & Invoicing",
-    subtitle: "Customer orders, tax invoices, and automatic stock deduction",
-  },
-  purchase: {
-    title: "Purchase Orders & Restock",
-    subtitle: "Vendor procurement, receiving actions, and warehouse stock increment",
-  },
-  stock: {
-    title: "Inventory Catalog & Audit Ledger",
-    subtitle: "Real-time SKU quantities, minimum thresholds, and chronological history",
-  },
-  reports: {
-    title: "Analytics & Business Intelligence",
-    subtitle: "Valuation reports, top performers, expense breakdown, and CSV exports",
-  },
-  godowns: {
-    title: "Regional Godowns & Warehouses",
-    subtitle: "Multi-facility storage capacities and inter-godown inventory transfers",
-  },
-  contacts: {
-    title: "Clients & Vendor Directory",
-    subtitle: "Corporate customer profiles, suppliers and contact details",
-  },
-};
-
 export function TopBar({
-  activeTab,
   onOpenMobileMenu,
   onOpenCommandPalette,
   onOpenCreateSale,
   onOpenCreatePO,
-  onOpenAddItem,
 }: TopBarProps) {
-  const currentInfo = TAB_TITLES[activeTab] || {
-    title: "Inventory Suite",
-    subtitle: "SasthaSoft Enterprise Management",
-  };
-
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-slate-200 dark:border-zinc-800 px-4 sm:px-6 flex items-center justify-between gap-4">
-      {/* Mobile Menu & Titles */}
+    <header className="sticky top-0 z-30 h-16 bg-white border-b border-[#EAE4E3] px-4 sm:px-6 flex items-center justify-between gap-4 transition-colors">
+      {/* Left: Mobile Toggle & Company Badge */}
       <div className="flex items-center gap-3 min-w-0">
         <button
           onClick={onOpenMobileMenu}
-          className="p-2 -ml-2 rounded-lg text-slate-500 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-900 lg:hidden"
+          className="p-2 -ml-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 lg:hidden"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <div className="min-w-0">
-          <h1 className="text-sm sm:text-base font-bold text-slate-900 dark:text-zinc-100 truncate">
-            {currentInfo.title}
-          </h1>
-          <p className="text-[11px] text-slate-400 dark:text-zinc-400 truncate hidden md:block">
-            {currentInfo.subtitle}
-          </p>
+        {/* Company Logo Badge */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-[#D78EAB]/15 text-[#AD597B] font-bold text-xs flex items-center justify-center border border-[#D78EAB]/30">
+            SS
+          </div>
+          <div className="hidden sm:block">
+            <h2 className="text-sm font-bold text-[#1C2727] tracking-tight">
+              SasthaSoft Enterprise Ltd
+            </h2>
+          </div>
         </div>
       </div>
 
-      {/* Global Search / Action Bar */}
-      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-        {/* Command Search Trigger */}
-        <button
+      {/* Center: Search Bar with Cashmere pill style */}
+      <div className="flex-1 max-w-md mx-2 sm:mx-6">
+        <div
           onClick={onOpenCommandPalette}
-          className="flex items-center gap-2 px-3 py-1.5 text-xs text-slate-400 bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 rounded-xl border border-slate-200/80 dark:border-zinc-800 transition-colors"
+          className="relative flex items-center w-full cursor-pointer group"
         >
-          <Search className="w-3.5 h-3.5 text-slate-400" />
-          <span className="hidden sm:inline">Search anything...</span>
-          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded text-slate-500">
+          <Search className="absolute left-3.5 w-4 h-4 text-slate-400 group-hover:text-[#228181] transition-colors" />
+          <input
+            type="text"
+            readOnly
+            placeholder="Search products, orders, customers..."
+            className="w-full pl-10 pr-12 py-2 text-xs sm:text-sm rounded-full bg-[#F4F0EF] text-[#1C2727] placeholder:text-slate-400 border border-transparent focus:outline-none cursor-pointer hover:border-[#DDD6D5] transition-colors"
+          />
+          <kbd className="absolute right-3 hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-white border border-[#EAE4E3] rounded shadow-xs">
             Ctrl+K
           </kbd>
-        </button>
+        </div>
+      </div>
 
-        {/* Quick CTA: New Sale */}
+      {/* Right: Action Buttons, Badges, Profile */}
+      <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        {/* Quick New Sale CTA (Deep Pine Teal) */}
         <button
           onClick={onOpenCreateSale}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm shadow-indigo-600/20 transition-all"
+          className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#228181] hover:bg-[#1A6868] rounded-xl shadow-sm transition-colors"
         >
           <ShoppingCart className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">New Sale</span>
+          <span>New Sale</span>
         </button>
 
-        {/* Quick CTA: New PO */}
+        {/* Quick New PO CTA (Dusty Rose) */}
         <button
           onClick={onOpenCreatePO}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-sm shadow-emerald-600/20 transition-all"
+          className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#D78EAB] hover:bg-[#C27896] rounded-xl shadow-sm transition-colors"
         >
           <Truck className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">New PO</span>
+          <span>Restock PO</span>
         </button>
 
-        {/* Quick CTA: Add Item */}
+        {/* Message / Mail icon with badge */}
         <button
-          onClick={onOpenAddItem}
-          className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-zinc-200 bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 rounded-xl border border-slate-200 dark:border-zinc-800 transition-all"
+          onClick={onOpenCommandPalette}
+          className="relative p-2 rounded-full text-slate-400 hover:text-[#228181] hover:bg-slate-100 transition-colors"
+          title="Messages"
         >
-          <PackagePlus className="w-3.5 h-3.5 text-amber-500" />
-          <span>Add SKU</span>
+          <Mail className="w-4 h-4" />
+          <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#D78EAB] text-white text-[9px] font-bold flex items-center justify-center">
+            1
+          </span>
         </button>
+
+        {/* Bell Notification icon with badge */}
+        <button
+          onClick={onOpenCommandPalette}
+          className="relative p-2 rounded-full text-slate-400 hover:text-[#228181] hover:bg-slate-100 transition-colors"
+          title="Notifications"
+        >
+          <Bell className="w-4 h-4" />
+          <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#228181] text-white text-[9px] font-bold flex items-center justify-center">
+            2
+          </span>
+        </button>
+
+        {/* User Profile */}
+        <div className="flex items-center gap-2.5 pl-2 sm:border-l border-[#EAE4E3]">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#228181] to-[#D78EAB] text-white font-bold text-xs flex items-center justify-center shadow-xs">
+            K
+          </div>
+          <div className="hidden xl:block text-left">
+            <div className="text-xs font-bold text-[#1C2727] leading-tight">
+              Khushi
+            </div>
+            <div className="text-[10px] text-slate-400">
+              Procurement &amp; Full Stack Lead
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );

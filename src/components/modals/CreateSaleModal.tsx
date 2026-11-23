@@ -161,7 +161,7 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-xl">
+            <div className="p-2 bg-[#EAF4F4] text-[#228181] rounded-xl">
               <ShoppingCart className="w-5 h-5" />
             </div>
             <div>
@@ -389,7 +389,7 @@ export function CreateSaleModal({ isOpen, onClose }: CreateSaleModalProps) {
             <button
               type="submit"
               disabled={Boolean(validationError)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-lg shadow-indigo-600/25 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#228181] hover:bg-[#1A6868] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-xs transition-all"
             >
               <Check className="w-4 h-4" />
               Generate Invoice & Deduct Stock
