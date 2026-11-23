@@ -1,69 +1,255 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { useInventory } from "@/context/InventoryContext";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { TopBar } from "@/components/layout/TopBar";
+import { DashboardView } from "@/components/views/DashboardView";
+import { SalesView } from "@/components/views/SalesView";
+import { PurchaseView } from "@/components/views/PurchaseView";
+import { StockView } from "@/components/views/StockView";
+import { ReportsView } from "@/components/views/ReportsView";
+import { GodownsView } from "@/components/views/GodownsView";
+import { ContactsView } from "@/components/views/ContactsView";
+import { CreateSaleModal } from "@/components/modals/CreateSaleModal";
+import { CreatePurchaseModal } from "@/components/modals/CreatePurchaseModal";
+import { AddItemModal } from "@/components/modals/AddItemModal";
+import { AdjustStockModal } from "@/components/modals/AdjustStockModal";
+import { TransferStockModal } from "@/components/modals/TransferStockModal";
+import { InvoiceViewModal } from "@/components/modals/InvoiceViewModal";
+import { CommandPalette } from "@/components/common/CommandPalette";
+import { ToastContainer } from "@/components/common/ToastContainer";
+import { Item, SalesOrder } from "@/types/inventory";
+import { Boxes, Loader2 } from "lucide-react";
 
 export default function Home() {
+  const { isLoaded } = useInventory();
+
+  // Navigation state
+  const [activeTab, setActiveTab] = useState<string>("dashboard");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Theme state
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  // Modals state
+  const [isCreateSaleOpen, setIsCreateSaleOpen] = useState(false);
+  const [isCreatePOOpen, setIsCreatePOOpen] = useState(false);
+  const [poPreselectedItemId, setPoPreselectedItemId] = useState<string | undefined>(undefined);
+
+  const [isAddItemOpen, setIsAddItemOpen] = useState(false);
+  const [itemToEdit, setItemToEdit] = useState<Item | null>(null);
+
+  const [isAdjustStockOpen, setIsAdjustStockOpen] = useState(false);
+  const [itemToAdjust, setItemToAdjust] = useState<Item | null>(null);
+
+  const [isTransferOpen, setIsTransferOpen] = useState(false);
+
+  const [isInvoiceViewOpen, setIsInvoiceViewOpen] = useState(false);
+  const [orderToView, setOrderToView] = useState<SalesOrder | null>(null);
+
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
+  // Synchronize dark mode class to html element
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("sastha_theme") as "light" | "dark" | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      if (savedTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    } else {
+      // Default to dark for premium modern feel
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("sastha_theme", nextTheme);
+    if (nextTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
+  // Keyboard shortcut Ctrl/Cmd + K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Handlers
+  const handleOpenCreatePO = (preselectedItemId?: string) => {
+    setPoPreselectedItemId(preselectedItemId);
+    setIsCreatePOOpen(true);
+  };
+
+  const handleOpenAddItem = (editItem?: Item) => {
+    setItemToEdit(editItem || null);
+    setIsAddItemOpen(true);
+  };
+
+  const handleOpenAdjustStock = (item: Item) => {
+    setItemToAdjust(item);
+    setIsAdjustStockOpen(true);
+  };
+
+  const handleSelectOrder = (order: SalesOrder) => {
+    setOrderToView(order);
+    setIsInvoiceViewOpen(true);
+  };
+
+  if (!isLoaded) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-200">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg animate-bounce">
+            <Boxes className="w-6 h-6" />
+          </div>
+          <div>
+            <div className="font-bold text-lg">SasthaSoft InventoCore</div>
+            <div className="text-xs text-slate-400 flex items-center gap-1.5">
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-500" />
+              Initializing connected inventory state...
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="min-h-screen flex bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-zinc-100">
+      {/* Sidebar Navigation */}
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        isMobileOpen={isMobileMenuOpen}
+        setIsMobileOpen={setIsMobileMenuOpen}
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+
+      {/* Main Content Area */}
+      <div className="flex-1 lg:pl-64 flex flex-col min-w-0 min-h-screen">
+        {/* Top Header Bar */}
+        <TopBar
+          activeTab={activeTab}
+          onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          onOpenCreateSale={() => setIsCreateSaleOpen(true)}
+          onOpenCreatePO={() => handleOpenCreatePO()}
+          onOpenAddItem={() => handleOpenAddItem()}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+
+        {/* View Content Body */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          {activeTab === "dashboard" && (
+            <DashboardView
+              onOpenCreateSale={() => setIsCreateSaleOpen(true)}
+              onOpenCreatePO={handleOpenCreatePO}
+              onNavigate={(tab) => setActiveTab(tab)}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          )}
+
+          {activeTab === "sales" && (
+            <SalesView
+              onOpenCreateSale={() => setIsCreateSaleOpen(true)}
+              onSelectOrder={handleSelectOrder}
+            />
+          )}
+
+          {activeTab === "purchase" && (
+            <PurchaseView onOpenCreatePO={() => handleOpenCreatePO()} />
+          )}
+
+          {activeTab === "stock" && (
+            <StockView
+              onOpenAddItem={handleOpenAddItem}
+              onOpenAdjustStock={handleOpenAdjustStock}
+            />
+          )}
+
+          {activeTab === "reports" && <ReportsView />}
+
+          {activeTab === "godowns" && (
+            <GodownsView onOpenTransfer={() => setIsTransferOpen(true)} />
+          )}
+
+          {activeTab === "contacts" && <ContactsView />}
+        </main>
+      </div>
+
+      {/* Modals & Dialogs */}
+      <CreateSaleModal
+        isOpen={isCreateSaleOpen}
+        onClose={() => setIsCreateSaleOpen(false)}
+      />
+
+      <CreatePurchaseModal
+        isOpen={isCreatePOOpen}
+        onClose={() => {
+          setIsCreatePOOpen(false);
+          setPoPreselectedItemId(undefined);
+        }}
+        preselectedItemId={poPreselectedItemId}
+      />
+
+      <AddItemModal
+        isOpen={isAddItemOpen}
+        onClose={() => {
+          setIsAddItemOpen(false);
+          setItemToEdit(null);
+        }}
+        editItem={itemToEdit}
+      />
+
+      <AdjustStockModal
+        isOpen={isAdjustStockOpen}
+        onClose={() => {
+          setIsAdjustStockOpen(false);
+          setItemToAdjust(null);
+        }}
+        item={itemToAdjust}
+      />
+
+      <TransferStockModal
+        isOpen={isTransferOpen}
+        onClose={() => setIsTransferOpen(false)}
+      />
+
+      <InvoiceViewModal
+        isOpen={isInvoiceViewOpen}
+        onClose={() => {
+          setIsInvoiceViewOpen(false);
+          setOrderToView(null);
+        }}
+        order={orderToView}
+      />
+
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onNavigate={(tab) => setActiveTab(tab)}
+        onOpenCreateSale={() => setIsCreateSaleOpen(true)}
+        onOpenCreatePO={() => handleOpenCreatePO()}
+        onOpenAddItem={() => handleOpenAddItem()}
+        onOpenTransfer={() => setIsTransferOpen(true)}
+      />
+
+      {/* Floating Notifications */}
+      <ToastContainer />
     </div>
   );
 }
