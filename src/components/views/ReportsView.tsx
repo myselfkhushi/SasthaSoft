@@ -141,42 +141,44 @@ export function ReportsView() {
     <div className="space-y-6">
       {/* Tab Switcher & Export Button */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE4E3] pb-4">
-        <div className="flex items-center gap-1.5 p-1 bg-[#EAE4E3]/70 rounded-xl border border-[#DDD6D5]">
-          <button
-            onClick={() => setActiveReportTab("stock")}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-150 active:scale-95 ${
-              activeReportTab === "stock"
-                ? "bg-white text-[#1C2727] shadow-sm"
-                : "text-slate-600 hover:text-[#1C2727]"
-            }`}
-          >
-            <Package className="w-4 h-4 text-[#228181]" />
-            <span>Stock Valuation Report</span>
-          </button>
+        <div className="overflow-x-auto no-scrollbar max-w-full pb-1">
+          <div className="flex items-center gap-1.5 p-1 bg-[#EAE4E3]/70 rounded-xl border border-[#DDD6D5] whitespace-nowrap min-w-max">
+            <button
+              onClick={() => setActiveReportTab("stock")}
+              className={`inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-150 active:scale-95 ${
+                activeReportTab === "stock"
+                  ? "bg-white text-[#1C2727] shadow-sm"
+                  : "text-slate-600 hover:text-[#1C2727]"
+              }`}
+            >
+              <Package className="w-4 h-4 text-[#228181]" />
+              <span>Stock Valuation Report</span>
+            </button>
 
-          <button
-            onClick={() => setActiveReportTab("sales")}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-150 active:scale-95 ${
-              activeReportTab === "sales"
-                ? "bg-white text-[#1C2727] shadow-sm"
-                : "text-slate-600 hover:text-[#1C2727]"
-            }`}
-          >
-            <TrendingUp className="w-4 h-4 text-[#D78EAB]" />
-            <span>Sales Performance Report</span>
-          </button>
+            <button
+              onClick={() => setActiveReportTab("sales")}
+              className={`inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-150 active:scale-95 ${
+                activeReportTab === "sales"
+                  ? "bg-white text-[#1C2727] shadow-sm"
+                  : "text-slate-600 hover:text-[#1C2727]"
+              }`}
+            >
+              <TrendingUp className="w-4 h-4 text-[#D78EAB]" />
+              <span>Sales Performance Report</span>
+            </button>
 
-          <button
-            onClick={() => setActiveReportTab("purchase")}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-150 active:scale-95 ${
-              activeReportTab === "purchase"
-                ? "bg-white text-[#1C2727] shadow-sm"
-                : "text-slate-600 hover:text-[#1C2727]"
-            }`}
-          >
-            <Truck className="w-4 h-4 text-[#165353]" />
-            <span>Purchase &amp; Spend Report</span>
-          </button>
+            <button
+              onClick={() => setActiveReportTab("purchase")}
+              className={`inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-150 active:scale-95 ${
+                activeReportTab === "purchase"
+                  ? "bg-white text-[#1C2727] shadow-sm"
+                  : "text-slate-600 hover:text-[#1C2727]"
+              }`}
+            >
+              <Truck className="w-4 h-4 text-[#165353]" />
+              <span>Purchase &amp; Spend Report</span>
+            </button>
+          </div>
         </div>
 
         <button
@@ -274,7 +276,7 @@ export function ReportsView() {
               </h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                   <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     <th className="py-3 px-4">Category Name</th>
@@ -405,7 +407,7 @@ export function ReportsView() {
               </h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                   <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     <th className="py-3.5 px-4">Product Name &amp; SKU</th>
@@ -516,7 +518,7 @@ export function ReportsView() {
               </h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                   <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     <th className="py-3.5 px-4">Supplier Company</th>

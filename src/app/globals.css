@@ -20,6 +20,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* Custom smooth scrollbar */
@@ -36,4 +37,119 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(34, 129, 129, 0.4);
+}
+
+/* Hide scrollbar utility for clean mobile horizontal scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Keyframe Animations */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes topProgress {
+  0% {
+    width: 0%;
+    left: 0;
+  }
+  50% {
+    width: 70%;
+    left: 15%;
+  }
+  100% {
+    width: 100%;
+    left: 0;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 129, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(34, 129, 129, 0);
+  }
+}
+
+@keyframes pulseGlowRose {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(215, 142, 171, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(215, 142, 171, 0);
+  }
+}
+
+@keyframes shimmerSlide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Animation Utility Classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-glow-teal {
+  animation: pulseGlow 2.5s infinite;
+}
+
+.animate-pulse-glow-rose {
+  animation: pulseGlowRose 2.2s infinite;
+}
+
+.animate-top-progress {
+  animation: topProgress 0.45s ease-out forwards;
+}
+
+/* Premium Card & Glassmorphic Utilities */
+.premium-card {
+  background: #ffffff;
+  border: 1px solid #eae4e3;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 4px 16px 0 rgba(34, 129, 129, 0.03);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-card:hover {
+  border-color: rgba(34, 129, 129, 0.3);
+  box-shadow: 0 6px 24px -4px rgba(34, 129, 129, 0.08);
+  transform: translateY(-2px);
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }

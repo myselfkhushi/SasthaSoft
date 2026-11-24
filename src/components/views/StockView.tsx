@@ -188,7 +188,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
           {/* Catalog Table */}
           <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse min-w-[840px]">
                 <thead>
                   <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     <th className="py-3.5 px-4">SKU / Item</th>
@@ -374,7 +374,7 @@ export function StockView({ onOpenAddItem, onOpenAdjustStock }: StockViewProps) 
           {/* Audit Ledger Table */}
           <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     <th className="py-3.5 px-4">Timestamp</th>

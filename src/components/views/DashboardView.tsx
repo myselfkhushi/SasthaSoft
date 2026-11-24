@@ -112,67 +112,79 @@ export function DashboardView({
         </div>
       )}
 
-      {/* 4 Top Metric Cards (Precise Coolors Palette) */}
+      {/* 4 Top Metric Cards (Precise Coolors Palette & Micro-Interactions) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Total costs (Dusty Rose Circle #D78EAB) */}
-        <div className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(215,142,171,0.06)] flex items-center gap-4 hover:shadow-md transition-shadow">
+        <div
+          onClick={() => onNavigate("purchase")}
+          className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(215,142,171,0.06)] hover:-translate-y-1 hover:shadow-[0_12px_28px_-8px_rgba(215,142,171,0.15)] hover:border-[#D78EAB]/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center gap-4"
+        >
           <div className="w-12 h-12 rounded-full bg-[#D78EAB] text-white flex items-center justify-center shrink-0 shadow-md shadow-[#D78EAB]/25">
             <span className="text-lg font-bold">₹</span>
           </div>
           <div className="min-w-0">
-            <div className="text-xs font-medium text-slate-400">Total costs</div>
-            <div className="text-xl font-bold text-[#1C2727] tracking-tight mt-0.5 truncate">
+            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total costs</div>
+            <div className="text-xl sm:text-2xl font-black text-[#1C2727] tracking-tight mt-0.5 truncate font-mono">
               {formatCurrency(totalCosts)}
             </div>
-            <div className="flex items-center gap-1 text-[11px] text-[#228181] font-semibold mt-0.5">
+            <div className="flex items-center gap-1 text-[11px] text-[#228181] font-bold mt-0.5">
               <span>↑ +40% this week</span>
             </div>
           </div>
         </div>
 
         {/* Card 2: Total sales (Deep Pine Teal Circle #228181) */}
-        <div className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(34,129,129,0.06)] flex items-center gap-4 hover:shadow-md transition-shadow">
+        <div
+          onClick={() => onNavigate("sales")}
+          className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(34,129,129,0.06)] hover:-translate-y-1 hover:shadow-[0_12px_28px_-8px_rgba(34,129,129,0.15)] hover:border-[#228181]/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center gap-4"
+        >
           <div className="w-12 h-12 rounded-full bg-[#228181] text-white flex items-center justify-center shrink-0 shadow-md shadow-[#228181]/25">
             <TrendingUp className="w-5 h-5" />
           </div>
           <div className="min-w-0">
-            <div className="text-xs font-medium text-slate-400">Total sales</div>
-            <div className="text-xl font-bold text-[#1C2727] tracking-tight mt-0.5 truncate">
+            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total sales</div>
+            <div className="text-xl sm:text-2xl font-black text-[#1C2727] tracking-tight mt-0.5 truncate font-mono">
               {formatCurrency(totalSales)}
             </div>
-            <div className="flex items-center gap-1 text-[11px] text-[#228181] font-semibold mt-0.5">
+            <div className="flex items-center gap-1 text-[11px] text-[#228181] font-bold mt-0.5">
               <span>↑ +60% this week</span>
             </div>
           </div>
         </div>
 
         {/* Card 3: Products sold (Teal Shade Circle #329999) */}
-        <div className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(34,129,129,0.06)] flex items-center gap-4 hover:shadow-md transition-shadow">
+        <div
+          onClick={() => onNavigate("stock")}
+          className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(34,129,129,0.06)] hover:-translate-y-1 hover:shadow-[0_12px_28px_-8px_rgba(34,129,129,0.15)] hover:border-[#329999]/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center gap-4"
+        >
           <div className="w-12 h-12 rounded-full bg-[#329999] text-white flex items-center justify-center shrink-0 shadow-md shadow-[#329999]/25">
             <Package className="w-5 h-5" />
           </div>
           <div className="min-w-0">
-            <div className="text-xs font-medium text-slate-400">Products sold</div>
-            <div className="text-xl font-bold text-[#1C2727] tracking-tight mt-0.5 truncate">
+            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Products sold</div>
+            <div className="text-xl sm:text-2xl font-black text-[#1C2727] tracking-tight mt-0.5 truncate font-mono">
               {totalProductsSold > 0 ? totalProductsSold : 2500}
             </div>
-            <div className="flex items-center gap-1 text-[11px] text-[#228181] font-semibold mt-0.5">
+            <div className="flex items-center gap-1 text-[11px] text-[#228181] font-bold mt-0.5">
               <span>↑ +40% this week</span>
             </div>
           </div>
         </div>
 
         {/* Card 4: Stock on hand (Cashmere / Slate Tone #857B7A) */}
-        <div className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(221,214,213,0.12)] flex items-center gap-4 hover:shadow-md transition-shadow">
+        <div
+          onClick={() => onNavigate("stock")}
+          className="p-5 rounded-2xl bg-white border border-[#EAE4E3] shadow-[0_4px_20px_rgba(221,214,213,0.12)] hover:-translate-y-1 hover:shadow-[0_12px_28px_-8px_rgba(34,129,129,0.15)] hover:border-[#857B7A]/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center gap-4"
+        >
           <div className="w-12 h-12 rounded-full bg-[#857B7A] text-white flex items-center justify-center shrink-0 shadow-md shadow-[#857B7A]/25">
             <Boxes className="w-5 h-5" />
           </div>
           <div className="min-w-0">
-            <div className="text-xs font-medium text-slate-400">Stock on hand</div>
-            <div className="text-xl font-bold text-[#1C2727] tracking-tight mt-0.5 truncate">
+            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Stock on hand</div>
+            <div className="text-xl sm:text-2xl font-black text-[#1C2727] tracking-tight mt-0.5 truncate font-mono">
               {formatCurrency(totalStockOnHandValuation)}
             </div>
-            <div className="flex items-center gap-1 text-[11px] text-[#228181] font-semibold mt-0.5">
+            <div className="flex items-center gap-1 text-[11px] text-[#228181] font-bold mt-0.5">
               <span>↑ +50% this week</span>
             </div>
           </div>
@@ -389,7 +401,7 @@ export function DashboardView({
           </div>
 
           <div className="overflow-x-auto mt-2">
-            <table className="w-full text-left border-collapse text-xs">
+            <table className="w-full text-left border-collapse text-xs min-w-[560px]">
               <thead>
                 <tr className="border-b border-[#EAE4E3] text-[11px] font-bold text-slate-400 bg-[#FAF8F7]">
                   <th className="py-2.5 px-3">Order ID</th>

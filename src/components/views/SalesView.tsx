@@ -156,7 +156,7 @@ export function SalesView({ onOpenCreateSale, onSelectOrder }: SalesViewProps) {
       {/* Sales Orders Table */}
       <div className="rounded-2xl border border-[#EAE4E3] bg-white overflow-hidden shadow-[0_4px_20px_rgba(34,129,129,0.03)]">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse min-w-[760px]">
             <thead>
               <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 <th className="py-3.5 px-4">Invoice #</th>

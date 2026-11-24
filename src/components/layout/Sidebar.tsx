@@ -126,16 +126,28 @@ export function Sidebar({
         </div>
 
         {/* Brand Header */}
-        <div className="relative z-10 px-6 pt-6 pb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold tracking-tight text-white">Inven</span>
-            <span className="w-6 h-6 rounded-md bg-[#D78EAB] flex items-center justify-center text-white font-black text-xs shadow-sm">
-              3
-            </span>
+        <div className="relative z-10 px-6 pt-6 pb-4 flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xl font-bold tracking-tight text-white">Inven</span>
+              <span className="w-6 h-6 rounded-md bg-[#D78EAB] flex items-center justify-center text-white font-black text-xs shadow-sm">
+                3
+              </span>
+            </div>
+            <p className="text-[11px] text-[#C0DBDB]/80 mt-1 font-normal tracking-wide">
+              Manage your inventory the easiest way
+            </p>
           </div>
-          <p className="text-[11px] text-[#C0DBDB]/80 mt-1 font-normal tracking-wide">
-            Manage your inventory the easiest way
-          </p>
+
+          {/* Mobile Close Button */}
+          <button
+            onClick={() => setIsMobileOpen(false)}
+            className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white lg:hidden active:scale-95 transition-all"
+            aria-label="Close Navigation"
+          >
+            <RotateCcw className="hidden" />
+            <span className="text-xs font-bold px-1">✕</span>
+          </button>
         </div>
 
         {/* Navigation Items */}

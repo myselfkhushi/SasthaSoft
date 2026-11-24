@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useInventory } from "@/context/InventoryContext";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopBar } from "@/components/layout/TopBar";
+import { MobileNavBar } from "@/components/layout/MobileNavBar";
+import { AppLoader } from "@/components/common/AppLoader";
 import { DashboardView } from "@/components/views/DashboardView";
 import { SalesView } from "@/components/views/SalesView";
 import { PurchaseView } from "@/components/views/PurchaseView";
@@ -20,17 +22,16 @@ import { InvoiceViewModal } from "@/components/modals/InvoiceViewModal";
 import { CommandPalette } from "@/components/common/CommandPalette";
 import { ToastContainer } from "@/components/common/ToastContainer";
 import { Item, SalesOrder } from "@/types/inventory";
-import { Boxes, Loader2 } from "lucide-react";
 
 export default function Home() {
   const { isLoaded } = useInventory();
 
+  // Initial executive splash loader complete state
+  const [isSplashComplete, setIsSplashComplete] = useState(false);
+
   // Navigation state
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Theme state - default to warm light theme as per reference design
-  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   // Modals state
   const [isCreateSaleOpen, setIsCreateSaleOpen] = useState(false);
@@ -89,28 +90,14 @@ export default function Home() {
     setIsInvoiceViewOpen(true);
   };
 
-  if (!isLoaded) {
-    return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-[#F8F6F5] text-[#1C2727]">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#228181] flex items-center justify-center text-white shadow-lg animate-bounce">
-            <Boxes className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="font-bold text-lg text-[#1C2727]">SasthaSoft InventoCore</div>
-            <div className="text-xs text-slate-500 flex items-center gap-1.5 font-medium">
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-[#228181]" />
-              Initializing connected inventory state...
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  // Ultra-Smooth Executive Splash Loader
+  if (!isLoaded || !isSplashComplete) {
+    return <AppLoader onComplete={() => setIsSplashComplete(true)} />;
   }
 
   return (
-    <div className="min-h-screen flex bg-[#F8F6F5] text-[#1C2727] transition-colors">
-      {/* Sidebar Navigation */}
+    <div className="min-h-screen flex bg-[#F8F6F5] text-[#1C2727] transition-colors relative selection:bg-[#228181]/20 selection:text-[#165353]">
+      {/* Sidebar Navigation (Desktop & Mobile Drawer) */}
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -132,43 +119,56 @@ export default function Home() {
           onOpenAddItem={() => handleOpenAddItem()}
         />
 
-        {/* View Content Body */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
-          {activeTab === "dashboard" && (
-            <DashboardView
-              onOpenCreateSale={() => setIsCreateSaleOpen(true)}
-              onOpenCreatePO={handleOpenCreatePO}
-              onNavigate={(tab) => setActiveTab(tab)}
-            />
-          )}
+        {/* View Content Body with animated entrance and mobile bottom padding */}
+        <main className="flex-1 p-3 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-24 lg:pb-8">
+          <div key={activeTab} className="animate-fade-in-up">
+            {activeTab === "dashboard" && (
+              <DashboardView
+                onOpenCreateSale={() => setIsCreateSaleOpen(true)}
+                onOpenCreatePO={handleOpenCreatePO}
+                onNavigate={(tab) => setActiveTab(tab)}
+              />
+            )}
 
-          {activeTab === "sales" && (
-            <SalesView
-              onOpenCreateSale={() => setIsCreateSaleOpen(true)}
-              onSelectOrder={handleSelectOrder}
-            />
-          )}
+            {activeTab === "sales" && (
+              <SalesView
+                onOpenCreateSale={() => setIsCreateSaleOpen(true)}
+                onSelectOrder={handleSelectOrder}
+              />
+            )}
 
-          {activeTab === "purchase" && (
-            <PurchaseView onOpenCreatePO={() => handleOpenCreatePO()} />
-          )}
+            {activeTab === "purchase" && (
+              <PurchaseView onOpenCreatePO={() => handleOpenCreatePO()} />
+            )}
 
-          {activeTab === "stock" && (
-            <StockView
-              onOpenAddItem={handleOpenAddItem}
-              onOpenAdjustStock={handleOpenAdjustStock}
-            />
-          )}
+            {activeTab === "stock" && (
+              <StockView
+                onOpenAddItem={handleOpenAddItem}
+                onOpenAdjustStock={handleOpenAdjustStock}
+              />
+            )}
 
-          {activeTab === "reports" && <ReportsView />}
+            {activeTab === "reports" && <ReportsView />}
 
-          {activeTab === "godowns" && (
-            <GodownsView onOpenTransfer={() => setIsTransferOpen(true)} />
-          )}
+            {activeTab === "godowns" && (
+              <GodownsView onOpenTransfer={() => setIsTransferOpen(true)} />
+            )}
 
-          {activeTab === "contacts" && <ContactsView />}
+            {activeTab === "contacts" && <ContactsView />}
+          </div>
         </main>
       </div>
+
+      {/* Mobile Floating Bottom Navigation Bar (Hidden on desktop) */}
+      <MobileNavBar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
+        onOpenCreateSale={() => setIsCreateSaleOpen(true)}
+        onOpenCreatePO={() => handleOpenCreatePO()}
+        onOpenAddItem={() => handleOpenAddItem()}
+        onOpenTransfer={() => setIsTransferOpen(true)}
+      />
 
       {/* Modals & Dialogs */}
       <CreateSaleModal

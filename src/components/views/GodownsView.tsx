@@ -134,7 +134,7 @@ export function GodownsView({ onOpenTransfer }: GodownsViewProps) {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs sm:text-sm">
+          <table className="w-full text-left border-collapse text-xs sm:text-sm min-w-[700px]">
             <thead>
               <tr className="border-b border-[#EAE4E3] bg-[#FAF8F7] text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 <th className="py-3.5 px-4">Transfer Date</th>
